@@ -1,12 +1,11 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { View } from 'react-native';
-import Test from './app/views/Test';
+import { NativeBaseProvider } from "native-base";
+import Login from './app/views/Login'
 
 export default function App() {
   return (
-    <View>
-      <Test/>
-    </View>
+    <NativeBaseProvider>
+      <Login></Login>
+    </NativeBaseProvider>
   );
 }
