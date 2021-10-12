@@ -6,10 +6,10 @@ import Home from "./app/views/Home"
 export default function App() {
   return (
     <NativeBaseProvider>
-      <Appbar.Header>
+      {/* <Appbar.Header>
         <Appbar.Content title="Title" subtitle={"Subtitle"} />
         <Appbar.Action icon="magnify" onPress={() => {}} />
-      </Appbar.Header>
+      </Appbar.Header> */}
       {/* <Login/> */}
       <Home/>
     </NativeBaseProvider>

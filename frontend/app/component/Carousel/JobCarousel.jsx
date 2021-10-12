@@ -1,7 +1,7 @@
 import * as React from "react";
-import { Text, View, SafeAreaView, StyleSheet, Dimensions } from "react-native";
+import {View, SafeAreaView, StyleSheet, Dimensions } from "react-native";
 import Carousel, { Pagination } from "react-native-snap-carousel";
-import JobCard from "../Card/JobCard";
+import {Text} from "native-base"
 
 const horizontalMargin = 20;
 const slideWidth = 280;
@@ -15,19 +15,20 @@ const styles = StyleSheet.create({
     width: itemWidth,
     height: itemHeight,
     paddingHorizontal: horizontalMargin,
+    // other styles for the item container
   },
   slideInnerContainer: {
     width: slideWidth,
     flex: 1,
+    // other styles for the inner container
   },
 });
-
 class JobCarousel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      dummyData: [],
       activeIndex: 0,
-      dummyData: []
     };
   }
   componentDidMount() {
@@ -47,37 +48,40 @@ class JobCarousel extends React.Component {
         position: "Network Security",
         description: "Iphone",
       },
+      {
+        company: "Pepsi",
+        position: "Front-end developer",
+        description: "ABCDEF",
+      },
+      {
+        company: "Coke",
+        position: "Back-end developer",
+        description: "12345",
+      },
+      {
+        company: "Apple",
+        position: "Network Security",
+        description: "Iphone",
+      },
+      {
+        company: "Apple",
+        position: "Network Security",
+        description: "Iphone",
+      },
     ];
     this.setState({ dummyData: dataList });
   }
+
   _renderItem({ item, index }) {
     return (
       <View style={styles.slide}>
         <View style={styles.slideInnerContainer}>
-          <JobCard data={item}/>
+            <View style={{flex:1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'red'}}>
+                <Text fontSize='4xl'>{item.company}</Text>
+            </View>
+          
         </View>
       </View>
-    );
-  }
-
-  get pagination() {
-    const { entries, activeSlide } = this.state;
-    return (
-      <Pagination
-        dotsLength={this.state.dummyData.length}
-        activeDotIndex={this.state.activeIndex}
-        containerStyle={{ backgroundColor: "rgba(255, 255, 255, 0.92)" }}
-        dotStyle={{
-          width: 10,
-          height: 10,
-          borderRadius: 5,
-          marginHorizontal: 8,
-          backgroundColor: "rgba(0, 0, 0, 0.75)",
-        }}
-        inactiveDotStyle={{}}
-        inactiveDotOpacity={0.4}
-        inactiveDotScale={0.6}
-      />
     );
   }
 
@@ -88,6 +92,9 @@ class JobCarousel extends React.Component {
           style={{ flex: 1, flexDirection: "row", justifyContent: "center" }}
         >
           <Carousel
+            loop
+            ref={(c) => { this._carousel = c;}}
+            layout={'stack'}
             data={this.state.dummyData}
             renderItem={this._renderItem}
             onSnapToItem={(index) => this.setState({ activeIndex: index })}
@@ -95,7 +102,6 @@ class JobCarousel extends React.Component {
             itemWidth={itemWidth}
           />
         </View>
-        {this.pagination}
       </View>
     );
   }
