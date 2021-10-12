@@ -44,9 +44,11 @@ const UserController = {
       if (user && (await bcrypt.compare(password, user.password))) {
         const sess = req.session;
         sess.user = user;
-        res.status(200).json(user);
+        res.status(200).send("Login " + user.user_name);
       }
-      res.status(400).send("Invalid username or password");
+      else{
+        return res.status(400).send("Invalid username or password");
+      }
     } catch (err) {
       console.log(err);
     }
@@ -54,16 +56,15 @@ const UserController = {
   logout: async function (req, res, next) {
     try {
       req.session.destroy();
-      res.status(200).send("logout");
+      res.status(200).send("Logout");
     } catch (err) {
       console.log(err);
     }
   },
   getSession: async function (req, res, next) {
     let sess = req.session;
-    console.log(sess);
     if (!sess.user) {
-      res.status(400).send("Please Login");
+      res.status(400).json({status: "Please Login"});
     }
     res.status(200).send(sess.user);
   },
