@@ -18,14 +18,9 @@ app.use(
 );
 
 const UserRouter = require("./src/router/UserRouter");
-app.post("/register", UserRouter);
-app.post("/login", UserRouter);
-app.post("/logout", UserRouter);
-app.get("/session", UserRouter);
+app.use(UserRouter);
 
 const PostRouter = require("./src/router/PostRouter");
-app.post("/post/create", PostRouter);
-app.get("/post", PostRouter);
-app.get("/post/:id", PostRouter);
+app.use(PostRouter)
 
 module.exports = app;

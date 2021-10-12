@@ -45,8 +45,7 @@ const UserController = {
         const sess = req.session;
         sess.user = user;
         res.status(200).send("Login " + user.user_name);
-      }
-      else{
+      } else {
         return res.status(400).send("Invalid username or password");
       }
     } catch (err) {
@@ -64,10 +63,51 @@ const UserController = {
   getSession: async function (req, res, next) {
     let sess = req.session;
     if (!sess.user) {
-      res.status(400).json({status: "Please Login"});
+      res.status(400).json({ status: "Please Login" });
     }
     res.status(200).send(sess.user);
   },
+  getAllUser: async function (req, res, next) {
+    try {
+      const allUser = await User.find({});
+      res.status(201).json(allUser);
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  getOneUser: async function (req, res, next) {
+    try {
+      const { id } = req.params;
+      const user = await User.findById(id);
+      res.status(201).json(user);
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  updateUser: async function (req, res, next) {
+    try {
+      const {id} = req.params
+      const obj = req.body;
+      const userUpdate = await User.findByIdAndUpdate(id, {
+        user_name: obj.user_name,
+        email: obj.email,
+        first_name: obj.first_name,
+        last_name: obj.last_name
+      });
+      res.status(201).json("Update user completed");
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  deleteUser: async function (req, res, next) {
+    try{
+      const {id} = req.params
+      await User.findByIdAndDelete(id)
+      res.status(201).json("Delete user completed")
+    } catch (err){
+      console.log(err)
+    }
+  }
 };
 
 module.exports = UserController;
