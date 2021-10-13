@@ -4,7 +4,8 @@ const PostController = {
   createPost: async function (req, res, next) {
     try {
       const { title, description, type, ownerId, status } = req.body;
-      if (!(title && type)) {
+      const createDate = new Date()
+      if (!(title && type)) { 
         res.status(400).send("Title and type is required");
       } else {
         const post = await Post.create({
@@ -13,6 +14,7 @@ const PostController = {
           type,
           ownerId,
           status,
+          createDate,
         });
         res.status(201).json(post);
       }

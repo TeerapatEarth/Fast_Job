@@ -23,4 +23,7 @@ app.use(UserRouter);
 const PostRouter = require("./src/router/PostRouter");
 app.use(PostRouter)
 
+const JobRouter = require('./src/router/JobRouter');
+app.use(JobRouter)
+
 module.exports = app;

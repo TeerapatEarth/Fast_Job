@@ -10,5 +10,8 @@ router.get('/user', UserController.getAllUser)
 router.get('/user/:id', UserController.getOneUser)
 router.put('/updateuser/:id', UserController.updateUser)
 router.delete('/deleteuser/:id', UserController.deleteUser)
+router.put('/report/:id', UserController.report)
+router.put('/ban/:id', UserController.banUser)
+router.put('/unban/:id', UserController.unBanUser)
 
 module.exports = router

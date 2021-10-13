@@ -4,8 +4,26 @@ const jwt = require("jsonwebtoken");
 const UserController = {
   regisUser: async function (req, res, next) {
     try {
-      const { user_name, password, first_name, last_name, email } = req.body;
-      if (!(user_name && password && first_name && last_name && email)) {
+      const {
+        user_name,
+        password,
+        first_name,
+        last_name,
+        email,
+        dateOfBirth,
+        job,
+      } = req.body;
+      if (
+        !(
+          user_name &&
+          password &&
+          first_name &&
+          last_name &&
+          email &&
+          dateOfBirth &&
+          job
+        )
+      ) {
         res.status(400).send("All input is required");
       }
       const oldUser = await User.findOne({ email });
@@ -19,6 +37,8 @@ const UserController = {
         first_name,
         last_name,
         email: email.toLowerCase(),
+        dateOfBirth,
+        job
       });
       const token = jwt.sign(
         { user_id: user.id, email },
@@ -86,13 +106,13 @@ const UserController = {
   },
   updateUser: async function (req, res, next) {
     try {
-      const {id} = req.params
+      const { id } = req.params;
       const obj = req.body;
       const userUpdate = await User.findByIdAndUpdate(id, {
         user_name: obj.user_name,
         email: obj.email,
         first_name: obj.first_name,
-        last_name: obj.last_name
+        last_name: obj.last_name,
       });
       res.status(201).json("Update user completed");
     } catch (err) {
@@ -100,10 +120,38 @@ const UserController = {
     }
   },
   deleteUser: async function (req, res, next) {
+    try {
+      const { id } = req.params;
+      await User.findByIdAndDelete(id);
+      res.status(201).json("Delete user completed");
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  report: async function (req, res, next) {
+    try {
+      const {id} = req.params;
+      const user = await User.findById(id)
+      await User.findByIdAndUpdate(id, {reportCount: user.reportCount + 1})
+      res.status(201).send("Report user completed")
+    } catch (err){
+      console.log(err)
+    }
+  },
+  banUser: async function (req, res, next) {
     try{
-      const {id} = req.params
-      await User.findByIdAndDelete(id)
-      res.status(201).json("Delete user completed")
+      const {id} = req.params;
+      await User.findByIdAndUpdate(id, {ban: true})
+      res.status(201).send("Banned user")
+    } catch (err){
+      console.log(err)
+    }
+  },
+  unBanUser: async function (req, res, next) {
+    try{
+      const {id} = req.params;
+      await User.findByIdAndUpdate(id, {ban: false})
+      res.status(201).send("Un Banned user")
     } catch (err){
       console.log(err)
     }

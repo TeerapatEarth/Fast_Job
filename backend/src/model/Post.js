@@ -5,7 +5,8 @@ const postSchema = new mongoose.Schema({
     description: { type: String, default: "" },
     type : { type: String, default: null},
     ownerId: { type: String, default: null},
-    status: { type: Boolean, default: true }
+    status: { type: Boolean, default: true },
+    createDate: { type: Date, default: null }
 })
 
 module.exports = mongoose.model('post', postSchema);
