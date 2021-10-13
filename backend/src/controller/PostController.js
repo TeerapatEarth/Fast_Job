@@ -1,9 +1,10 @@
 const Post = require("../model/Post");
-
+const path = require("path")
 const PostController = {
   createPost: async function (req, res, next) {
     try {
       const { title, description, type, ownerId, status } = req.body;
+      var img = req.file.path
       const createDate = new Date()
       if (!(title && type)) { 
         res.status(400).send("Title and type is required");
@@ -15,6 +16,7 @@ const PostController = {
           ownerId,
           status,
           createDate,
+          img,
         });
         res.status(201).json(post);
       }

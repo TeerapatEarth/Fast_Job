@@ -1,6 +1,5 @@
 require("dotenv").config();
 require("./src/db/database").connect();
-
 const express = require("express");
 const session = require("express-session");
 const app = express();
@@ -21,9 +20,9 @@ const UserRouter = require("./src/router/UserRouter");
 app.use(UserRouter);
 
 const PostRouter = require("./src/router/PostRouter");
-app.use(PostRouter)
+app.use(PostRouter);
 
-const JobRouter = require('./src/router/JobRouter');
-app.use(JobRouter)
+const JobRouter = require("./src/router/JobRouter");
+app.use(JobRouter);
 
 module.exports = app;
