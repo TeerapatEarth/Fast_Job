@@ -1,5 +1,4 @@
 const Post = require("../model/Post");
-const path = require("path")
 const PostController = {
   createPost: async function (req, res, next) {
     try {
