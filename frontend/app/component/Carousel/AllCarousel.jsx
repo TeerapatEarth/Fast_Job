@@ -41,15 +41,25 @@ class JobCarousel extends React.Component {
       <View style={styles.slide}>
         <View style={styles.slideInnerContainer}>
         <Card>
-          <Card.Cover
-              source={require("../../assets/findjob.png")}
-              resizeMode="cover"
-              alt="job"
-            />
+          {item.Type == "FindJob" &&
+              <Card.Cover
+                source={require("../../assets/findjob.png")}
+                resizeMode="cover"
+                alt="job"
+              />
+            }
+            {item.Type == "FindWorker" &&
+              <Card.Cover
+                source={require("../../assets/findworker.png")}
+                resizeMode="cover"
+                alt="job"
+              />
+            }
             <Card.Content>
               <Paragraph>{"Posted by:  " + item.OwnerName}</Paragraph>
               <Paragraph>{"Require:  "+item.position}</Paragraph>
             </Card.Content>
+            
             
             <Card.Actions>
               <Button title="See Detail" />

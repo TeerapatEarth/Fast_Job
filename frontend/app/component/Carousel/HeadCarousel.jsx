@@ -114,7 +114,7 @@ class HeadCarousel extends React.Component {
               {item.number == 3 && (
                 <View>
                   <Image
-                    source={require("../../assets/pane1.png")}
+                    source={require("../../assets/pane3.png")}
                     resizeMode="contain"
                     alt="3"
                   />

@@ -1,14 +1,14 @@
 import * as React from "react";
 import { View, StyleSheet, Dimensions, Button } from "react-native";
 import Carousel from "react-native-snap-carousel";
-import { Card, Paragraph } from "react-native-paper";
+import { Card, Paragraph, FAB } from "react-native-paper";
 
 const horizontalMargin = 20;
 const slideWidth = 280;
 
 const sliderWidth = Dimensions.get("window").width;
 const itemWidth = slideWidth + horizontalMargin * 2;
-const itemHeight = "auto"
+const itemHeight = "auto";
 
 const styles = StyleSheet.create({
   slide: {
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     // other styles for the inner container
   },
 });
-class JobCarousel extends React.Component {
+class WorkerCarousel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -40,9 +40,9 @@ class JobCarousel extends React.Component {
     return (
       <View style={styles.slide}>
         <View style={styles.slideInnerContainer}>
-        <Card>
-          <Card.Cover
-              source={require("../../assets/findjob.png")}
+          <Card>
+            <Card.Cover
+              source={require("../../assets/findworker.png")}
               resizeMode="cover"
               alt="job"
             />
@@ -83,4 +83,4 @@ class JobCarousel extends React.Component {
   }
 }
 
-export default JobCarousel;
+export default WorkerCarousel;
