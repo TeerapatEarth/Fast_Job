@@ -14,7 +14,10 @@ const UserController = {
         dateOfBirth,
         job,
       } = req.body;
-      const img = req.file.path
+      var img = null
+      if(req.file){
+        img = req.file.path
+      }
       if (
         !(
           user_name &&

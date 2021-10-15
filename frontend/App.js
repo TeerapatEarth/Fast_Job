@@ -1,17 +1,16 @@
 import React from "react";
-import { NativeBaseProvider } from "native-base";
+import { NativeBaseProvider, Switch } from "native-base";
 import Login from "./app/views/Login";
 import { Appbar } from "react-native-paper";
-import Home from "./app/views/Home"
+import Home from "./app/views/Home";
+import { NativeRouter, Route, Link } from "react-router-native";
 export default function App() {
   return (
-    <NativeBaseProvider>
-      {/* <Appbar.Header>
-        <Appbar.Content title="Title" subtitle={"Subtitle"} />
-        <Appbar.Action icon="magnify" onPress={() => {}} />
-      </Appbar.Header> */}
-      {/* <Login/> */}
-      <Home/>
-    </NativeBaseProvider>
+    <NativeRouter>
+      <NativeBaseProvider>
+        <Route path="/" component={Login}></Route>
+        <Route path="/home" component={Home}></Route>
+      </NativeBaseProvider>
+    </NativeRouter>
   );
 }

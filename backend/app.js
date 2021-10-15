@@ -5,7 +5,7 @@ const cors = require('cors')
 const session = require("express-session");
 const app = express();
 app.use(cors({
-  origin: 'http://localhost:19006',
+  origin: 'http://localhost:19002',
   credentials: true
 }))
 app.use(express.json());
