@@ -5,6 +5,7 @@ const postSchema = new mongoose.Schema({
     description: { type: String, default: "" },
     type : { type: String, default: null},
     ownerId: { type: String, default: null},
+    job: { type: String, default: null},
     status: { type: Boolean, default: true },
     createDate: { type: Date, default: null },
     img:{ type: String, default: null}

@@ -1,11 +1,12 @@
 import { Text, ScrollView, Box } from "native-base";
 import React, { Component } from "react";
-import { StyleSheet, Dimensions, View } from "react-native";
+import { StyleSheet, Dimensions, View, Alert } from "react-native";
 import HeadCarousel from "../component/Carousel/HeadCarousel";
 import { Tabs, NativeBaseProvider, Center, Image } from "native-base";
 import JobTabs from "../component/Tab/JobTabs";
-import { FAB, Portal } from "react-native-paper";
-
+import { FAB, Portal, Appbar } from "react-native-paper";
+import AuthService from "../service/AuthService"
+import { withRouter} from "react-router-native";
 const styles = StyleSheet.create({
   Header: {
     backgroundColor: "rgb(20,78,99)",
@@ -21,10 +22,15 @@ const styles = StyleSheet.create({
   },
   fab: {
     position: "absolute",
-    margin: 16,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "rgb(20,78,99)"
+    margin: 50,
+    right: -30,
+    bottom: 40,
+    backgroundColor: "rgb(20,78,99)",
+  },
+  bottom: {
+    marginTop: 20,
+    justifyContent: "flex-end",
+    backgroundColor: "#26c5de",
   },
 });
 class Homepage extends React.Component {
@@ -92,10 +98,42 @@ class Homepage extends React.Component {
       ],
     };
   }
+  confirmLogout = () => {
+    Alert.alert("Logout", "คุณต้องการออกจากระบบหรือไม่",[
+      {text: "Logout", onPress: () => this.logout()},
+      {text: "Cancle"},
+    ])
+  }
+  logout = async () => {
+    try{
+      await AuthService.logout()
+      console.log('Logout')
+      this.props.history.push("/")
+    } catch (err){
+      console.log(err)
+    }
+  }
+  session = async () => {
+    try{
+      const result = await AuthService.session()
+      console.log(result.data)
+    } catch (err){
+      Alert.alert("Error", "โปรดเข้าสู่ระบบ",[
+        {text: "OK"}
+      ])
+    }
+  }
   render() {
     return (
       <View>
-        <ScrollView>
+        <Appbar style={styles.bottom}>
+          <Appbar.Action
+            icon="power"
+            color="white"
+            onPress={() => this.confirmLogout()}
+          />
+        </Appbar>
+        <ScrollView mb={100}>
           <Box p={5} mb={3} style={styles.Header}>
             <Image
               source={require("../assets/logover2.png")}
@@ -119,4 +157,4 @@ class Homepage extends React.Component {
     );
   }
 }
-export default Homepage;
+export default withRouter(Homepage);
