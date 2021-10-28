@@ -7,11 +7,32 @@ import {
   Center,
   Heading,
   FormControl,
-  ScrollView
+  ScrollView,
 } from "native-base";
 import React, { Component } from "react";
-import { StyleSheet } from "react-native";
-export default class FormLogin extends Component {
+import { StyleSheet, Alert } from "react-native";
+import AuthService from "../../service/AuthService";
+class FormLogin extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      user_name: "",
+      password: "",
+    };
+  }
+  login = async () => {
+    const obj = {
+      user_name: this.state.user_name,
+      password: this.state.password,
+    };
+    try {
+      await AuthService.login(obj);
+      console.log("Login");
+      this.props.navigation.navigate("home")
+    } catch (err) {
+      Alert.alert("Error", "กรอกข้อมูลไม่ถูกต้อง", [{ text: "OK" }]);
+    }
+  };
   render() {
     return (
       <NativeBaseProvider>
@@ -19,7 +40,7 @@ export default class FormLogin extends Component {
           width="100%"
           _contentContainerStyle={{
             bg: "primary.900",
-            height: "100%"
+            height: "100%",
           }}
         >
           <Center flex={1}>
@@ -34,7 +55,11 @@ export default class FormLogin extends Component {
                 <FormControl.Label _text={{ color: "white" }}>
                   Username
                 </FormControl.Label>
-                <Input placeholder="Username" style={styles.bgInput} />
+                <Input
+                  placeholder="Username"
+                  style={styles.bgInput}
+                  onChangeText={(text) => this.setState({ user_name: text })}
+                />
               </FormControl>
               <FormControl>
                 <FormControl.Label _text={{ color: "white" }}>
@@ -44,10 +69,13 @@ export default class FormLogin extends Component {
                   placeholder="Password"
                   type="password"
                   style={styles.bgInput}
+                  onChangeText={(text) => this.setState({ password: text })}
                 />
               </FormControl>
-              <Button width="100%" mt="3">Login</Button>
-              <Button width="100%" onPress={() => this.props.regis()}>
+              <Button width="100%" mt="3" onPress={() => this.login()}>
+                Login
+              </Button>
+              <Button width="100%" onPress={() => this.props.navigation.navigate("FormRegis")}>
                 Sign up
               </Button>
             </Stack>
@@ -66,3 +94,5 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
 });
+
+export default FormLogin;
