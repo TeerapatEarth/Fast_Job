@@ -1,29 +1,15 @@
 import React, { Component } from "react";
-import { NativeBaseProvider, PresenceTransition } from "native-base";
 import FormLogin from "../component/LoginAndRegis/FormLogin";
 import FormRegis from "../component/LoginAndRegis/FormRegis";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+const Stack = createNativeStackNavigator();
 export default class Login extends Component {
-  constructor() {
-    super();
-    this.state = {
-      loginPage: true,
-      regisPage: false,
-    };
-  }
-  goToRegisForm = () => {
-    this.setState({ loginPage: false, regisPage: true });
-  };
-  goToLoginForm = () => {
-    this.setState({ loginPage: true, regisPage: false });
-  };
   render() {
     return (
-      <NativeBaseProvider>
-        {this.state.loginPage && (
-          <FormLogin regis={this.goToRegisForm} show={this.state.loginPage} />
-        )}
-        {!this.state.loginPage && <FormRegis login={this.goToLoginForm} />}
-      </NativeBaseProvider>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name={"FormLogin"} component={FormLogin}></Stack.Screen>
+        <Stack.Screen name={"FormRegis"} component={FormRegis}></Stack.Screen>
+      </Stack.Navigator>
     );
   }
 }

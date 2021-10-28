@@ -12,7 +12,6 @@ import {
 import React, { Component } from "react";
 import { StyleSheet, Alert } from "react-native";
 import AuthService from "../../service/AuthService";
-import { withRouter } from "react-router-native";
 class FormLogin extends Component {
   constructor(props) {
     super(props);
@@ -29,7 +28,7 @@ class FormLogin extends Component {
     try {
       await AuthService.login(obj);
       console.log("Login");
-      this.props.history.push("/home")
+      this.props.navigation.navigate("home")
     } catch (err) {
       Alert.alert("Error", "กรอกข้อมูลไม่ถูกต้อง", [{ text: "OK" }]);
     }
@@ -76,7 +75,7 @@ class FormLogin extends Component {
               <Button width="100%" mt="3" onPress={() => this.login()}>
                 Login
               </Button>
-              <Button width="100%" onPress={() => this.props.regis()}>
+              <Button width="100%" onPress={() => this.props.navigation.navigate("FormRegis")}>
                 Sign up
               </Button>
             </Stack>
@@ -96,4 +95,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withRouter(FormLogin);
+export default FormLogin;

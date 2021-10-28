@@ -4,9 +4,8 @@ import { StyleSheet, Dimensions, View, Alert } from "react-native";
 import HeadCarousel from "../component/Carousel/HeadCarousel";
 import { Tabs, NativeBaseProvider, Center, Image } from "native-base";
 import JobTabs from "../component/Tab/JobTabs";
-import { FAB, Portal, Appbar } from "react-native-paper";
-import AuthService from "../service/AuthService"
-import { withRouter} from "react-router-native";
+import { FAB, Portal, Appbar, Avatar } from "react-native-paper";
+import AuthService from "../service/AuthService";
 const styles = StyleSheet.create({
   Header: {
     backgroundColor: "rgb(20,78,99)",
@@ -24,7 +23,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     margin: 50,
     right: -30,
-    bottom: 40,
+    bottom: -20,
     backgroundColor: "rgb(20,78,99)",
   },
   bottom: {
@@ -37,6 +36,7 @@ class Homepage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      sessionUser: "",
       activeIndex: 0,
       dummyData: [
         {
@@ -97,43 +97,51 @@ class Homepage extends React.Component {
         },
       ],
     };
+    this.session();
   }
   confirmLogout = () => {
-    Alert.alert("Logout", "คุณต้องการออกจากระบบหรือไม่",[
-      {text: "Logout", onPress: () => this.logout()},
-      {text: "Cancle"},
-    ])
-  }
+    Alert.alert("Logout", "คุณต้องการออกจากระบบหรือไม่", [
+      { text: "Logout", onPress: () => this.logout() },
+      { text: "Cancle" },
+    ]);
+  };
   logout = async () => {
-    try{
-      await AuthService.logout()
-      console.log('Logout')
-      this.props.history.push("/")
-    } catch (err){
-      console.log(err)
+    try {
+      await AuthService.logout();
+      this.props.navigation.navigate("login");
+    } catch (err) {
+      console.log(err);
     }
-  }
+  };
   session = async () => {
-    try{
-      const result = await AuthService.session()
-      console.log(result.data)
-    } catch (err){
-      Alert.alert("Error", "โปรดเข้าสู่ระบบ",[
-        {text: "OK"}
-      ])
+    try {
+      const result = await AuthService.session();
+      this.setState({ sessionUser: result.data });
+    } catch (err) {
+      Alert.alert("Error", "โปรดเข้าสู่ระบบ", [{ text: "OK" }]);
     }
-  }
+  };
   render() {
     return (
-      <View>
+      <NativeBaseProvider>
         <Appbar style={styles.bottom}>
+          <Avatar.Icon size={35} icon="account" backgroundColor="black"/>
+          <Appbar.Content
+            title={this.state.sessionUser.user_name}
+            color="white"
+          />
+          <Appbar.Action
+            icon="bell"
+            color="white"
+            onPress={() => this.props.navigation.navigate("notify")}
+          />
           <Appbar.Action
             icon="power"
             color="white"
             onPress={() => this.confirmLogout()}
           />
         </Appbar>
-        <ScrollView mb={100}>
+        <ScrollView>
           <Box p={5} mb={3} style={styles.Header}>
             <Image
               source={require("../assets/logover2.png")}
@@ -153,8 +161,8 @@ class Homepage extends React.Component {
           icon="plus"
           onPress={() => console.log("kuy jeff")}
         />
-      </View>
+      </NativeBaseProvider>
     );
   }
 }
-export default withRouter(Homepage);
+export default Homepage;
