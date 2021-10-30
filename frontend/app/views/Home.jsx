@@ -1,6 +1,6 @@
 import { Text, ScrollView, Box } from "native-base";
 import React, { Component } from "react";
-import { StyleSheet, Dimensions, View, Alert } from "react-native";
+import { StyleSheet, Dimensions, View, Alert, } from "react-native";
 import HeadCarousel from "../component/Carousel/HeadCarousel";
 import { Tabs, NativeBaseProvider, Center, Image } from "native-base";
 import JobTabs from "../component/Tab/JobTabs";
@@ -116,6 +116,7 @@ class Homepage extends React.Component {
   session = async () => {
     try {
       const result = await AuthService.session();
+      console.log(result.data);
       this.setState({ sessionUser: result.data });
     } catch (err) {
       Alert.alert("Error", "โปรดเข้าสู่ระบบ", [{ text: "OK" }]);
@@ -125,7 +126,12 @@ class Homepage extends React.Component {
     return (
       <NativeBaseProvider>
         <Appbar style={styles.bottom}>
-          <Avatar.Icon size={35} icon="account" backgroundColor="black"/>
+          <Image
+            size="xs"
+            source={{uri: this.state.sessionUser.img}}
+            alt="Alternate Text"
+            style={{borderRadius: 20}}
+          />
           <Appbar.Content
             title={this.state.sessionUser.user_name}
             color="white"

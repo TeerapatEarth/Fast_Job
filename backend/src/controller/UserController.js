@@ -2,6 +2,7 @@ const User = require("../model/User");
 const Job = require("../model/Job")
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose")
+const imgur = require("imgur")
 const UserController = {
   regisUser: async function (req, res, next) {
     try {
@@ -16,7 +17,8 @@ const UserController = {
       } = req.body;
       var img = null
       if(req.file){
-        img = req.file.path
+        const url = await imgur.uploadFile(req.file.path)
+        img = url.link
       }
       if (
         !(
