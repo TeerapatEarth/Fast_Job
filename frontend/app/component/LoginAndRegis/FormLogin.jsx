@@ -28,6 +28,7 @@ class FormLogin extends Component {
     try {
       await AuthService.login(obj);
       console.log("Login");
+      this.setState({user_name: "", password: ""})
       this.props.navigation.navigate("home")
     } catch (err) {
       Alert.alert("Error", "กรอกข้อมูลไม่ถูกต้อง", [{ text: "OK" }]);
@@ -59,6 +60,7 @@ class FormLogin extends Component {
                   placeholder="Username"
                   style={styles.bgInput}
                   onChangeText={(text) => this.setState({ user_name: text })}
+                  value={this.state.user_name}
                 />
               </FormControl>
               <FormControl>
@@ -70,6 +72,7 @@ class FormLogin extends Component {
                   type="password"
                   style={styles.bgInput}
                   onChangeText={(text) => this.setState({ password: text })}
+                  value={this.state.password}
                 />
               </FormControl>
               <Button width="100%" mt="3" onPress={() => this.login()}>
