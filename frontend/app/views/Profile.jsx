@@ -93,7 +93,17 @@ class Profile extends React.Component {
     ]);
   }
   deleteAccount = async () => {
-    console.log("Delete account")
+    try{
+      await UserService.deleteUser(this.props.route.params.session._id)
+      Alert.alert("Complete", "ลบบัญชีสำเร็จ", [
+        {
+          text: "Ok",
+          onPress: () => this.logout()
+        }
+      ])
+    } catch (err){
+      console.log(err)
+    }
   }
   updateProfile = async () => {
     try {
@@ -121,7 +131,7 @@ class Profile extends React.Component {
       Alert.alert("Complete", "Update สำเร็จ", [
         {
           text: "Ok",
-          onPress: () => this.props.route.params.goBack()
+          onPress: () => this.props.navigation.goBack()
         }
       ])
 
@@ -129,6 +139,14 @@ class Profile extends React.Component {
       console.log(err)
     }
   }
+  logout = async () => {
+    try {
+      await AuthService.logout();
+      this.props.navigation.navigate("login");
+    } catch (err) {
+      console.log(err);
+    }
+  };
   render() {
     return (
       <NativeBaseProvider>
@@ -179,7 +197,7 @@ class Profile extends React.Component {
                     placeholder="New Password"
                     type="password"
                     style={{ borderColor: "black" }}
-                    onChangeText={(text) => this.setState({ password: text })}
+                    onChangeText={(text) => this.setState({ newPassword: text })}
                     isDisabled={this.state.hideInputPassword}
                   />
                 )}

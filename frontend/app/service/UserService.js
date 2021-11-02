@@ -9,6 +9,9 @@ class UserService {
     static async updateUser(id, payload){
         return await axios.put(API.User.update+id, payload)
     }
+    static async deleteUser(id){
+        return await axios.delete(API.User.delete+id)
+    }
 }
 
 export default UserService
