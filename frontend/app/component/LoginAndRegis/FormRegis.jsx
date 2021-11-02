@@ -12,7 +12,7 @@ import {
   Box,
 } from "native-base";
 import React, { Component } from "react";
-import { StyleSheet, Image, TouchableHighlight } from "react-native";
+import { StyleSheet, Image, } from "react-native";
 import UserService from "../../service/UserService";
 import { Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
@@ -31,7 +31,6 @@ export default class FormRegis extends Component {
       month: "",
       year: "",
       img: null,
-      arrday: ["1", "2"],
     };
   }
   pickImage = async () => {
@@ -57,6 +56,32 @@ export default class FormRegis extends Component {
   };
   regis = async () => {
     try {
+      if (
+        this.state.user_name == "" ||
+        this.state.password == "" ||
+        this.state.email == "" ||
+        this.state.first_name == "" ||
+        this.state.last_name == "" ||
+        this.state.job == "" ||
+        this.state.year == "" ||
+        this.state.month == "" ||
+        this.state.day == ""
+      ) {
+        Alert.alert("Error", "กรอกข้อมูลไม่ครบ", [
+          {
+            text: "OK",
+          },
+        ]);
+        return 0
+      }
+      if(this.state.password != this.state.confirmPassword){
+        Alert.alert("Error", "รหัสผ่านไม่ตรงกัน", [
+          {
+            text: "OK",
+          }
+        ])
+        return 0
+      }
       const fd = new FormData();
       fd.append("user_name", this.state.user_name);
       fd.append("password", this.state.password);

@@ -1,11 +1,12 @@
 import { Text, ScrollView, Box } from "native-base";
 import React, { Component } from "react";
-import { StyleSheet, Dimensions, View, Alert, } from "react-native";
+import { StyleSheet, Dimensions, View, Alert } from "react-native";
 import HeadCarousel from "../component/Carousel/HeadCarousel";
 import { Tabs, NativeBaseProvider, Center, Image } from "native-base";
 import JobTabs from "../component/Tab/JobTabs";
-import { FAB, Portal, Appbar, Avatar } from "react-native-paper";
+import { FAB } from "react-native-paper";
 import AuthService from "../service/AuthService";
+import Navbar from "../component/Appbar/Navbar";
 const styles = StyleSheet.create({
   Header: {
     backgroundColor: "rgb(20,78,99)",
@@ -116,37 +117,25 @@ class Homepage extends React.Component {
   session = async () => {
     try {
       const result = await AuthService.session();
-      console.log(result.data);
       this.setState({ sessionUser: result.data });
     } catch (err) {
       Alert.alert("Error", "โปรดเข้าสู่ระบบ", [{ text: "OK" }]);
     }
   };
+  updateSession = (sec) => {
+    this.setState({sessionUser: sec})
+  }
   render() {
     return (
       <NativeBaseProvider>
-        <Appbar style={styles.bottom}>
-          <Image
-            size="xs"
-            source={{uri: this.state.sessionUser.img}}
-            alt="Alternate Text"
-            style={{borderRadius: 20}}
-          />
-          <Appbar.Content
-            title={this.state.sessionUser.user_name}
-            color="white"
-          />
-          <Appbar.Action
-            icon="bell"
-            color="white"
-            onPress={() => this.props.navigation.navigate("notify")}
-          />
-          <Appbar.Action
-            icon="power"
-            color="white"
-            onPress={() => this.confirmLogout()}
-          />
-        </Appbar>
+        <Navbar
+          img={this.state.sessionUser.img}
+          user_name={this.state.sessionUser.user_name}
+          logout={this.confirmLogout}
+          navigation={this.props.navigation}
+          session={this.state.sessionUser}
+          updateSec={this.updateSession}
+        ></Navbar>
         <ScrollView>
           <Box p={5} mb={3} style={styles.Header}>
             <Image
