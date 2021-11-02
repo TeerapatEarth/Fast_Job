@@ -9,11 +9,13 @@ import {
   Input,
   Select,
   Box,
+  Modal,
 } from "native-base";
 import * as ImagePicker from "expo-image-picker";
 import React, { Component } from "react";
-import { StyleSheet, Text, Image } from "react-native";
+import { StyleSheet, Text, Image, Alert } from "react-native";
 import { Appbar } from "react-native-paper";
+import UserService from "../service/UserService";
 const bcrypt = require("bcryptjs");
 const styles = StyleSheet.create({
   bottom: {
@@ -29,14 +31,16 @@ class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user_name: this.props.route.params.user_name,
-      password: "123",
-      email: this.props.route.params.email,
-      first_name: this.props.route.params.first_name,
-      last_name: this.props.route.params.last_name,
-      job: this.props.route.params.job,
-      img: this.props.route.params.img,
+      user_name: this.props.route.params.session.user_name,
+      newPassword: "",
+      email: this.props.route.params.session.email,
+      first_name: this.props.route.params.session.first_name,
+      last_name: this.props.route.params.session.last_name,
+      job: this.props.route.params.session.job,
+      img: this.props.route.params.session.img,
       hideInputPassword: true,
+      showModal: false,
+      confirmPassword: "",
     };
   }
   pickImage = async () => {
@@ -61,13 +65,70 @@ class Profile extends React.Component {
     }
   };
   resetPassword = async () => {
-    // const result = bcrypt.compareSync(
-    //   this.state.password,
-    //   this.props.route.params.password
-    // );
-    // console.log(result);
-    this.setState({ hideInputPassword: false });
+    this.setState({ showModal: true });
   };
+  confirmPassword = async () => {
+    try {
+      const result = bcrypt.compareSync(
+        this.state.confirmPassword,
+        this.props.route.params.session.password
+      );
+      if (result) {
+        this.setState({ showModal: false, hideInputPassword: false });
+      } else {
+        Alert.alert("Error", "รหัสผ่านไม่ถูกต้อง", [
+          {
+            text: "Ok",
+          },
+        ]);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  confirmDeleteAccount = () => {
+    Alert.alert("Logout", "คุณต้องการลบบัญชีหรือไม่", [
+      { text: "Delete", onPress: () => this.deleteAccount() },
+      { text: "Cancle" },
+    ]);
+  }
+  deleteAccount = async () => {
+    console.log("Delete account")
+  }
+  updateProfile = async () => {
+    try {
+      const newSession = this.props.route.params.session
+      newSession.user_name = this.state.user_name
+      newSession.email = this.state.email
+      newSession.first_name = this.state.first_name
+      newSession.last_name = this.state.last_name
+      newSession.job = this.state.job
+      newSession.img = this.state.img
+      this.props.route.params.update(newSession)
+      const fd = new FormData()
+      fd.append("user_name", this.state.user_name)
+      fd.append("password", this.state.newPassword)
+      fd.append("email", this.state.email)
+      fd.append("first_name", this.state.first_name)
+      fd.append("last_name", this.state.last_name)
+      fd.append("job", this.state.job)
+      let localUri = this.state.img;
+      let filename = localUri.split("/").pop();
+      let match = /\.(\w+)$/.exec(filename);
+      let type = match ? `image/${match[1]}` : `image`;
+      fd.append("myImage", { uri: localUri, name: filename, type });
+      await UserService.updateUser(this.props.route.params.session._id, fd)
+      Alert.alert("Complete", "Update สำเร็จ", [
+        {
+          text: "Ok",
+          onPress: () => this.props.route.params.goBack()
+        }
+      ])
+
+    } catch (err){
+      console.log(err)
+    }
+  }
   render() {
     return (
       <NativeBaseProvider>
@@ -81,7 +142,7 @@ class Profile extends React.Component {
         <ScrollView width="100%">
           <Center flex={1}>
             <Heading textAlign="center" mb="3" mt="5" style={styles.font}>
-              {this.props.route.params.user_name}
+              {this.state.user_name}
             </Heading>
             <Stack space={5} width="80%">
               <Box style={{ alignItems: "center" }}>
@@ -115,19 +176,22 @@ class Profile extends React.Component {
                 </FormControl.Label>
                 {!this.state.hideInputPassword && (
                   <Input
-                    placeholder="Password"
+                    placeholder="New Password"
+                    type="password"
                     style={{ borderColor: "black" }}
                     onChangeText={(text) => this.setState({ password: text })}
                     isDisabled={this.state.hideInputPassword}
                   />
                 )}
-                <Button
-                  width="100%"
-                  onPress={() => this.resetPassword()}
-                  style={{ marginTop: 20 }}
-                >
-                  Reset password
-                </Button>
+                {this.state.hideInputPassword && (
+                  <Button
+                    width="100%"
+                    onPress={() => this.resetPassword()}
+                    style={{ marginTop: 20 }}
+                  >
+                    Reset password
+                  </Button>
+                )}
               </FormControl>
               <FormControl>
                 <FormControl.Label _text={{ color: "black" }}>
@@ -185,14 +249,60 @@ class Profile extends React.Component {
                   ></Select.Item>
                 </Select>
               </FormControl>
-              <FormControl style={{marginBottom: 20}}>
-                <Button width="100%" onPress={() => this.resetPassword()} colorScheme="red" _text={{color: "white"}}>
+              <Button
+                width="100%"
+                style={{ marginTop: 5 }}
+                onPress={() => this.updateProfile()}
+              >
+                Update Profile
+              </Button>
+              <FormControl style={{ marginBottom: 20 }}>
+                <Button
+                  width="100%"
+                  onPress={() => {}}
+                  colorScheme="red"
+                  _text={{ color: "white" }}
+                  onPress={() => this.confirmDeleteAccount()}
+                >
                   Delete Account
                 </Button>
               </FormControl>
             </Stack>
           </Center>
         </ScrollView>
+        <Modal isOpen={this.state.showModal}>
+          <Modal.Content maxWidth="400px">
+            <Modal.Header>Reset Password</Modal.Header>
+            <Modal.Body>
+              <FormControl>
+                <FormControl.Label>Enter your password</FormControl.Label>
+                <Input
+                  placeholder="Password"
+                  type="password"
+                  style={{ borderColor: "black" }}
+                  onChangeText={(text) =>
+                    this.setState({ confirmPassword: text })
+                  }
+                  value={this.state.confirmPassword}
+                />
+              </FormControl>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button.Group space={2}>
+                <Button
+                  variant="ghost"
+                  colorScheme="blueGray"
+                  onPress={() =>
+                    this.setState({ showModal: false, confirmPassword: "" })
+                  }
+                >
+                  Cancel
+                </Button>
+                <Button onPress={() => this.confirmPassword()}>Ok</Button>
+              </Button.Group>
+            </Modal.Footer>
+          </Modal.Content>
+        </Modal>
       </NativeBaseProvider>
     );
   }

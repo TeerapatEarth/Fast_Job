@@ -14,7 +14,13 @@ export default class Navbar extends Component {
     return (
       <Appbar style={styles.bottom}>
         <TouchableRipple
-          onPress={() => this.props.navigation.navigate("profile", this.props.session)}
+          onPress={() =>
+            this.props.navigation.navigate("profile", {
+              session: this.props.session,
+              update: this.props.updateSec,
+              goBack: this.props.navigation.goBack,
+            })
+          }
         >
           <Image
             size="xs"

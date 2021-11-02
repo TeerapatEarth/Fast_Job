@@ -117,12 +117,14 @@ class Homepage extends React.Component {
   session = async () => {
     try {
       const result = await AuthService.session();
-      console.log(result.data);
       this.setState({ sessionUser: result.data });
     } catch (err) {
       Alert.alert("Error", "โปรดเข้าสู่ระบบ", [{ text: "OK" }]);
     }
   };
+  updateSession = (sec) => {
+    this.setState({sessionUser: sec})
+  }
   render() {
     return (
       <NativeBaseProvider>
@@ -132,6 +134,7 @@ class Homepage extends React.Component {
           logout={this.confirmLogout}
           navigation={this.props.navigation}
           session={this.state.sessionUser}
+          updateSec={this.updateSession}
         ></Navbar>
         <ScrollView>
           <Box p={5} mb={3} style={styles.Header}>
