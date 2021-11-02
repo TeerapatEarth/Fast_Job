@@ -1,4 +1,4 @@
-const BASE_URL = 'http://192.168.1.7:5001'
+const BASE_URL = 'http://192.168.1.3:5001'
 const API = {
     Auth: {
         login: `${BASE_URL}/login`,
