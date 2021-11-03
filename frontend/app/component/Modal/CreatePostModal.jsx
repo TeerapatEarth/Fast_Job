@@ -6,10 +6,10 @@ export default class CreatePostModal extends Component {
     return (
       <Modal isOpen={this.props.show}>
         <Modal.Content maxWidth="400px">
-          <Modal.Header>Reset Password</Modal.Header>
+          <Modal.Header>Create Post</Modal.Header>
           <Modal.Body>
             <FormControl>
-              <FormControl.Label>Enter your password</FormControl.Label>
+              <FormControl.Label>blaaaaa</FormControl.Label>
               <Input
               />
             </FormControl>
