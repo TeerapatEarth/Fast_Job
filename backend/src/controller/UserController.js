@@ -1,8 +1,8 @@
 const User = require("../model/User");
-const Job = require("../model/Job")
+const Job = require("../model/Job");
 const bcrypt = require("bcryptjs");
-const mongoose = require("mongoose")
-const imgur = require("imgur")
+const mongoose = require("mongoose");
+const imgur = require("imgur");
 const UserController = {
   regisUser: async function (req, res, next) {
     try {
@@ -15,10 +15,10 @@ const UserController = {
         dateOfBirth,
         job,
       } = req.body;
-      var img = null
-      if(req.file){
-        const url = await imgur.uploadFile(req.file.path)
-        img = url.link
+      var img = null;
+      if (req.file) {
+        const url = await imgur.uploadFile(req.file.path);
+        img = url.link;
       }
       if (
         !(
@@ -46,12 +46,12 @@ const UserController = {
         email: email.toLowerCase(),
         dateOfBirth,
         job,
-        img
+        img,
       });
-      const addUserToJob = await Job.findOne({job})
-      const arrUser = addUserToJob.user
-      arrUser.push(mongoose.Types.ObjectId(user._id))
-      await Job.findByIdAndUpdate(addUserToJob._id, {user: arrUser})
+      const addUserToJob = await Job.findOne({ job });
+      const arrUser = addUserToJob.user;
+      arrUser.push(mongoose.Types.ObjectId(user._id));
+      await Job.findByIdAndUpdate(addUserToJob._id, { user: arrUser });
       res.status(201).json(user);
     } catch (err) {
       console.log(err);
@@ -112,34 +112,44 @@ const UserController = {
     try {
       const { id } = req.params;
       const obj = req.body;
-      const oldInfo = await User.findById(id)
-      var img = oldInfo.img
-      if(req.file){
-        img = req.file.path
+      const oldInfo = await User.findById(id);
+      var img = oldInfo.img;
+      if (req.file) {
+        const url = await imgur.uploadFile(req.file.path);
+        img = url.link;
+      }
+      if (oldInfo.job !== obj.job) {
+        const objJob = await Job.findOne({ job: oldInfo.job });
+        const arrUser = objJob.user;
+        const indexDelete = arrUser.indexOf(id);
+        arrUser.splice(indexDelete, 1);
+        await Job.findByIdAndUpdate(objJob.id, { user: arrUser });
+        const newObjJob = await Job.findOne({ job: obj.job });
+        const newArrUser = newObjJob.user;
+        newArrUser.push(oldInfo._id);
+        await Job.findByIdAndUpdate(newObjJob.id, { user: newArrUser });
+      }
+      if (obj.password !== "") {
+        encryptedPassword = await bcrypt.hash(obj.password, 10);
+         await User.findByIdAndUpdate(id, {
+          user_name: obj.user_name,
+          email: obj.email,
+          first_name: obj.first_name,
+          last_name: obj.last_name,
+          password: encryptedPassword,
+          job: obj.job,
+          img: img,
+        });
       } else {
-        console.log(img)
+        await User.findByIdAndUpdate(id, {
+          user_name: obj.user_name,
+          email: obj.email,
+          first_name: obj.first_name,
+          last_name: obj.last_name,
+          job: obj.job,
+          img: img,
+        });
       }
-      if(oldInfo.job !== obj.job){
-        const objJob = await Job.findOne({job: oldInfo.job})
-        const arrUser = objJob.user
-        const indexDelete = arrUser.indexOf(id)
-        arrUser.splice(indexDelete, 1)
-        await Job.findByIdAndUpdate(objJob.id, {user: arrUser})
-        const newObjJob = await Job.findOne({job: obj.job})
-        const newArrUser = newObjJob.user
-        newArrUser.push(oldInfo._id)
-        await Job.findByIdAndUpdate(newObjJob.id, {user: newArrUser})
-      }
-      encryptedPassword = await bcrypt.hash(obj.password, 10);
-      await User.findByIdAndUpdate(id, {
-        user_name: obj.user_name,
-        email: obj.email,
-        first_name: obj.first_name,
-        last_name: obj.last_name,
-        password: encryptedPassword,
-        job: obj.job,
-        img: img
-      });
       res.status(201).json("Update user completed");
     } catch (err) {
       console.log(err);
@@ -148,13 +158,13 @@ const UserController = {
   deleteUser: async function (req, res, next) {
     try {
       const { id } = req.params;
-      const deleteUser = await User.findById(id)
-      const userJob = deleteUser.job
-      const objJob = await Job.findOne({job: userJob})
-      const arrUser = objJob.user
-      const indexDelete = arrUser.indexOf(id)
-      arrUser.splice(indexDelete, 1)
-      await Job.findByIdAndUpdate(objJob._id, {user: arrUser})
+      const deleteUser = await User.findById(id);
+      const userJob = deleteUser.job;
+      const objJob = await Job.findOne({ job: userJob });
+      const arrUser = objJob.user;
+      const indexDelete = arrUser.indexOf(id);
+      arrUser.splice(indexDelete, 1);
+      await Job.findByIdAndUpdate(objJob._id, { user: arrUser });
       await User.findByIdAndDelete(id);
       res.status(201).json("Delete user completed");
     } catch (err) {
@@ -163,32 +173,32 @@ const UserController = {
   },
   report: async function (req, res, next) {
     try {
-      const {id} = req.params;
-      const user = await User.findById(id)
-      await User.findByIdAndUpdate(id, {reportCount: user.reportCount + 1})
-      res.status(201).send("Report user completed")
-    } catch (err){
-      console.log(err)
+      const { id } = req.params;
+      const user = await User.findById(id);
+      await User.findByIdAndUpdate(id, { reportCount: user.reportCount + 1 });
+      res.status(201).send("Report user completed");
+    } catch (err) {
+      console.log(err);
     }
   },
   banUser: async function (req, res, next) {
-    try{
-      const {id} = req.params;
-      await User.findByIdAndUpdate(id, {ban: true})
-      res.status(201).send("Banned user")
-    } catch (err){
-      console.log(err)
+    try {
+      const { id } = req.params;
+      await User.findByIdAndUpdate(id, { ban: true });
+      res.status(201).send("Banned user");
+    } catch (err) {
+      console.log(err);
     }
   },
   unBanUser: async function (req, res, next) {
-    try{
-      const {id} = req.params;
-      await User.findByIdAndUpdate(id, {ban: false})
-      res.status(201).send("Un Banned user")
-    } catch (err){
-      console.log(err)
+    try {
+      const { id } = req.params;
+      await User.findByIdAndUpdate(id, { ban: false });
+      res.status(201).send("Un Banned user");
+    } catch (err) {
+      console.log(err);
     }
-  }
+  },
 };
 
 module.exports = UserController;
