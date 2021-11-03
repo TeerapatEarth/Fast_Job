@@ -173,7 +173,7 @@ class Homepage extends React.Component {
           onPress={() => this.setState({modalSwitch: true})}
         />
         {this.state.modalSwitch && (
-          <CreatePostModal setHide={this.hide}/>
+          <CreatePostModal user={this.state.sessionUser} setHide={this.hide}/>
         )}
         
       </NativeBaseProvider>

@@ -7,6 +7,9 @@ const API = {
     },
     User: {
         regis: `${BASE_URL}/register`,
+    },
+    Post: {
+        create: `${BASE_URL}/post/create`
     }
 }
 
