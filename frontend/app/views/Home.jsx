@@ -6,6 +6,7 @@ import { Tabs, NativeBaseProvider, Center, Image } from "native-base";
 import JobTabs from "../component/Tab/JobTabs";
 import { FAB } from "react-native-paper";
 import AuthService from "../service/AuthService";
+import CreatePostModal from "../component/Modal/CreatePostModal";
 import Navbar from "../component/Appbar/Navbar";
 const styles = StyleSheet.create({
   Header: {
@@ -39,6 +40,7 @@ class Homepage extends React.Component {
     this.state = {
       sessionUser: "",
       activeIndex: 0,
+      modalSwitch: false,
       dummyData: [
         {
           id: "0001",
@@ -122,6 +124,8 @@ class Homepage extends React.Component {
       Alert.alert("Error", "โปรดเข้าสู่ระบบ", [{ text: "OK" }]);
     }
   };
+  hide = (value) => {
+    this.setState({modalSwitch: value})
   updateSession = (sec) => {
     this.setState({sessionUser: sec})
   }
@@ -154,8 +158,12 @@ class Homepage extends React.Component {
           style={styles.fab}
           large
           icon="plus"
-          onPress={() => console.log("kuy jeff")}
+          onPress={() => this.setState({modalSwitch: true})}
         />
+        {this.state.modalSwitch && (
+          <CreatePostModal user={this.state.sessionUser} setHide={this.hide}/>
+        )}
+        
       </NativeBaseProvider>
     );
   }

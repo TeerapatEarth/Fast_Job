@@ -154,7 +154,6 @@ class HeadCarousel extends React.Component {
           style={{ flex: 1, flexDirection: "row", justifyContent: "center" }}
         >
           <Carousel
-            loop
             ref={(c) => {
               this._carousel = c;
             }}

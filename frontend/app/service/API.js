@@ -1,4 +1,4 @@
-const BASE_URL = 'http://192.168.1.7:5001'
+const BASE_URL = 'http://192.168.1.3:5001'
 const API = {
     Auth: {
         login: `${BASE_URL}/login`,
@@ -9,6 +9,9 @@ const API = {
         regis: `${BASE_URL}/register`,
         update: `${BASE_URL}/updateuser/`,
         delete: `${BASE_URL}/deleteuser/`
+    },
+    Post: {
+        create: `${BASE_URL}/post/create`
     }
 }
 
