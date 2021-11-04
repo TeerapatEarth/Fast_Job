@@ -57,7 +57,7 @@ class JobCarousel extends React.Component {
             }
             <Card.Content>
               <Paragraph>{"Posted by:  " + item.OwnerName}</Paragraph>
-              <Paragraph>{"Require:  "+item.position}</Paragraph>
+              <Paragraph>{"Required:  "+item.position}</Paragraph>
             </Card.Content>
             
             
