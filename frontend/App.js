@@ -6,6 +6,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Notify from "./app/views/Notify"
 import Profile from "./app/views/Profile"
+import AnotherProfile from "./app/views/AnotherProfile";
 const Stack = createNativeStackNavigator();
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
         <Stack.Screen name={"home"} component={Home}></Stack.Screen>
         <Stack.Screen name={"notify"} component={Notify}></Stack.Screen>
         <Stack.Screen name={"profile"} component={Profile}></Stack.Screen>
+        <Stack.Screen name={"anotherprofile"} component={AnotherProfile}></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );

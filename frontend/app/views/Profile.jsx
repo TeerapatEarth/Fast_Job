@@ -159,7 +159,7 @@ class Profile extends React.Component {
         </Appbar>
         <ScrollView width="100%">
           <Center flex={1}>
-            <Heading textAlign="center" mb="3" mt="5" style={styles.font}>
+            <Heading textAlign="center" mb="3" mt="5">
               {this.state.user_name}
             </Heading>
             <Stack space={5} width="80%">
@@ -277,7 +277,6 @@ class Profile extends React.Component {
               <FormControl style={{ marginBottom: 20 }}>
                 <Button
                   width="100%"
-                  onPress={() => {}}
                   colorScheme="red"
                   _text={{ color: "white" }}
                   onPress={() => this.confirmDeleteAccount()}
