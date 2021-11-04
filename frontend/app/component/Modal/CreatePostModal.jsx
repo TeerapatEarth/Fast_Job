@@ -107,6 +107,9 @@ class CreatePostModal extends React.Component {
       form.append("title", this.state.title);
       form.append("type", this.state.selectedType);
       form.append("ownerId", this.state.user);
+      form.append("first_name", this.props.user.first_name)
+      form.append("last_name", this.props.user.last_name)
+      form.append("imgOwner", this.props.user.img)
       form.append("description", this.state.description);
       form.append("job", this.state.selectedJob);
 

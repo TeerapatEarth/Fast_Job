@@ -9,6 +9,7 @@ import {
   Image,
   Button,
 } from "native-base";
+import AuthService from "../../service/AuthService";
 const data = [
   {
     id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
@@ -51,14 +52,31 @@ const data = [
   },
 ];
 export default class Newpost extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      sessionUser: ""
+    }
+    this.getSession()
+  }
+  getSession = async () => {
+    try{
+      const result = await AuthService.session();
+      this.setState({ sessionUser: result.data });
+      console.log(this.state.sessionUser)
+    } catch (err){
+      console.log(err)
+    }
+  }
   render() {
     return (
       <NativeBaseProvider>
         <FlatList
-          data={data}
+        style={{borderBottomColor: "red"}}
+          data={this.state.sessionUser.notiNewPost}
           renderItem={({ item }) => (
             <Box
-              height={150}
+              height={100}
               mb={1}
               _dark={{
                 borderColor: "gray.600",
@@ -70,48 +88,61 @@ export default class Newpost extends Component {
             >
               <HStack space={2}>
                 <Image
-                  size="xl"
+                  size="md"
                   source={{
-                    uri: item.avatarUrl,
+                    uri: item.img,
                   }}
                   alt="Alternate Text"
+                  style={{borderRadius: 10}}
                 />
-                <VStack style={{ width: 170 }}>
+                <VStack style={{ width: 200, }}>
                   <Text
                     _dark={{
                       color: "warmGray.50",
                     }}
                     color="coolGray.800"
                     bold
+                    numberOfLines={1}
                   >
-                    {item.fullName}
+                    {item.first_name} {item.last_name}
                   </Text>
+                  
                   <Text
                     color="coolGray.600"
                     _dark={{
                       color: "warmGray.200",
                     }}
                   >
-                    {item.recentText}
+                    {item.job}
+                  </Text>
+                  <Text
+                    color="coolGray.600"
+                    _dark={{
+                      color: "warmGray.200",
+                    }}
+                    numberOfLines={2}
+                    mt={1}
+                  >
+                    {item.description}aksldklaksd;askdlaks;dkalksd;ka;skdlaskd;mamksdmkamdklmaskmaskd;l
                   </Text>
                 </VStack>
-                <VStack justifyContent="space-between">
+                <VStack justifyContent="space-between" style={{ width: "23%"}}>
                   <Text
                     fontSize="xs"
                     _dark={{
                       color: "warmGray.50",
                     }}
                     color="coolGray.800"
-                    alignSelf="flex-start"
+                    alignSelf="center"
                   >
-                    {item.timeStamp}
+                    xxxxxxx
                   </Text>
-                  <Button>Detail</Button>
+                  <Button size="sm" alignSelf="center">Detail</Button>
                 </VStack>
               </HStack>
             </Box>
           )}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item._id}
         />
       </NativeBaseProvider>
     );

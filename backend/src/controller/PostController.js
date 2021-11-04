@@ -1,13 +1,15 @@
 const Post = require("../model/Post");
 const Job = require("../model/Job")
 const User = require("../model/User")
+const imgur = require("imgur");
 const PostController = {
   createPost: async function (req, res, next) {
     try {
-      const { title, description, type, ownerId, status, job } = req.body;
+      const { title, description, type, ownerId, first_name, last_name, imgOwner, status, job } = req.body;
       var img = null
       if(req.file){
-        img = req.file.path
+        const url = await imgur.uploadFile(req.file.path);
+        img = url.link;
       }
       const createDate = new Date()
       if (!(title && type)) { 
@@ -18,19 +20,27 @@ const PostController = {
           description,
           type,
           ownerId,
+          first_name,
+          last_name,
+          imgOwner,
           status,
           createDate,
           job,
           img,
         });
         const userNoti = await User.find({job})
-        userNoti.map(async (item) => {
+        const filterUserNoti = userNoti.filter((user) => user._id != ownerId)
+        filterUserNoti.map(async (item) => {
           const arrNotiPost = item.notiNewPost
           const notiPost = {
+            _id: post._id,
             title: post.title,
             description: post.description,
             type: post.type,
             ownerId: post.ownerId,
+            first_name: post.first_name,
+            last_name: post.last_name,
+            imgOwner: post.imgOwner,
             status: post.status,
             createDate: post.createDate,
             job: post.job,
