@@ -13,7 +13,8 @@ import {
 } from "native-base";
 import { Appbar } from "react-native-paper";
 import React, { Component } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Alert } from "react-native";
+import UserService from "../service/UserService";
 const styles = StyleSheet.create({
   bottom: {
     backgroundColor: "#26c5de",
@@ -25,6 +26,33 @@ const styles = StyleSheet.create({
   },
 });
 export default class AnotherProfile extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      user: "",
+    };
+    this.getUser(this.props.route.params.id);
+  }
+  getUser = async (id) => {
+    try {
+      const result = await UserService.getOneUser(id);
+      this.setState({ user: result.data });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  reportUser = async (id) => {
+    try{
+      await UserService.reportUser(id)
+      Alert.alert("Report user complete", "รายงานผู้ใช้สำเร็จ", [
+        {
+          text: "Close"
+        }
+      ])
+    } catch (err){
+      console.log(err)
+    }
+  }
   render() {
     return (
       <NativeBaseProvider>
@@ -33,18 +61,21 @@ export default class AnotherProfile extends Component {
             onPress={() => this.props.navigation.goBack()}
             style={styles.arrow}
           />
-          <Appbar.Content title="Another Profile" style={styles.arrow} />
+          <Appbar.Content
+            title={this.state.user.user_name}
+            style={styles.arrow}
+          />
         </Appbar>
-        <ScrollView width="100%" mt={5}>
+        <ScrollView width="100%" mt={3}>
           <Center flex={1}>
             <Heading textAlign="center" mb="3" mt="5">
-              Another Profile
+              {this.state.user.user_name}
             </Heading>
-            <Text fontSize={20}>Back-end Developer</Text>
+            <Text fontSize={20}>{this.state.user.job}</Text>
             <Stack space={5} width="80%" mt={10}>
               <Box style={{ alignItems: "center" }}>
                 <Image
-                  source={{ uri: "https://i.imgur.com/ZydjgsF.jpeg" }}
+                  source={{ uri: this.state.user.img }}
                   style={{
                     width: 200,
                     height: 200,
@@ -53,16 +84,19 @@ export default class AnotherProfile extends Component {
                   }}
                   alt="text"
                 />
-                <Box mt={5} mt={10} mb={10}>
-                  <Text fontSize={25}>Teerapat Boonchuaylaew</Text>
-                  <Box alignItems="flex-end">
-                    <Text fontSize={15}>frontend@email.com</Text>
-                  </Box>
+                <Box mt={5} mb={10}>
+                  <Text fontSize={25} alignSelf="center">
+                    {this.state.user.first_name} {this.state.user.last_name}
+                  </Text>
+                  <Text fontSize={15} alignSelf="center">
+                    {this.state.user.email}
+                  </Text>
                 </Box>
                 <Button
                   width="85%"
                   colorScheme="red"
                   _text={{ color: "white" }}
+                  onPress={() => this.reportUser(this.props.route.params.id)}
                 >
                   Report User
                 </Button>

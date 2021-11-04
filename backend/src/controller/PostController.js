@@ -11,7 +11,8 @@ const PostController = {
         const url = await imgur.uploadFile(req.file.path);
         img = url.link;
       }
-      const createDate = new Date()
+      const createDate = new Date().toLocaleDateString()
+      const createTime = new Date().toTimeString().substring(0, 9);
       if (!(title && type)) { 
         res.status(400).send("Title and type is required");
       } else {
@@ -25,6 +26,7 @@ const PostController = {
           imgOwner,
           status,
           createDate,
+          createTime,
           job,
           img,
         });
@@ -43,6 +45,7 @@ const PostController = {
             imgOwner: post.imgOwner,
             status: post.status,
             createDate: post.createDate,
+            createTime: post.createTime,
             job: post.job,
             img: post.img,
             seeByUser: false

@@ -12,6 +12,12 @@ class UserService {
     static async deleteUser(id){
         return await axios.delete(API.User.delete+id)
     }
+    static async getOneUser(id){
+        return await axios.get(API.User.oneUser+id)
+    }
+    static async reportUser(id){
+        return await axios.put(API.User.report+id)
+    }
 }
 
 export default UserService

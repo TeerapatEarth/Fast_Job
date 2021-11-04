@@ -10,7 +10,8 @@ const postSchema = new mongoose.Schema({
     imgOwner: { type: String, default: null},
     job: { type: String, default: null},
     status: { type: Boolean, default: true },
-    createDate: { type: Date, default: null },
+    createDate: { type: String, default: "" },
+    createTime: { type: String, default: ""},
     img:{ type: String, default: null}
 })
 

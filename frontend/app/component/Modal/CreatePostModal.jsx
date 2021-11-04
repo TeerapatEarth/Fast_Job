@@ -168,6 +168,7 @@ class CreatePostModal extends React.Component {
                 }}
                 placeholder="Your Post's title"
                 onChangeText={(text) => this.changeTitle(text)}
+                value={this.state.title}
               />
             </Card.Content>
             <Card.Content>
