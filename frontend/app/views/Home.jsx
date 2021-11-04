@@ -126,6 +126,7 @@ class Homepage extends React.Component {
   };
   hide = (value) => {
     this.setState({modalSwitch: value})
+  }
   updateSession = (sec) => {
     this.setState({sessionUser: sec})
   }
@@ -167,5 +168,6 @@ class Homepage extends React.Component {
       </NativeBaseProvider>
     );
   }
+  
 }
 export default Homepage;
