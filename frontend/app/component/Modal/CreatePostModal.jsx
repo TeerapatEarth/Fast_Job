@@ -6,10 +6,9 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
-  Alert
+  Alert,
 } from "react-native";
-import Modal from "react-native-modal";
-import { Input, TextArea, Text, Divider } from "native-base";
+import { Input, TextArea, Text, Divider, Modal } from "native-base";
 import * as ImagePicker from "expo-image-picker";
 import { Picker } from "@react-native-picker/picker";
 import { Card, Title, Paragraph, Avatar } from "react-native-paper";
@@ -73,8 +72,8 @@ class CreatePostModal extends React.Component {
     this.setState({ title: value });
   };
   changeDes = (value) => {
-      this.setState({description: value})
-  }
+    this.setState({ description: value });
+  };
   pickImage = async () => {
     if (Platform.OS !== "web") {
       const {
@@ -101,38 +100,35 @@ class CreatePostModal extends React.Component {
   };
   changeValueType = (value) => {
     this.setState({ selectedType: value });
-  }
+  };
   createPost = async () => {
     try {
-        const form = new FormData();
-        form.append("title", this.state.title)
-        form.append("type", this.state.selectedType)
-        form.append("ownerId", this.state.user)
-        form.append("description", this.state.description)
-        form.append("job", this.state.selectedJob)
-        
-        let localUri = this.state.image;
-        let filename = localUri.split("/").pop();
-        let match = /\.(\w+)$/.exec(filename);
-        let type = match ? `image/${match[1]}` : `image`;
+      const form = new FormData();
+      form.append("title", this.state.title);
+      form.append("type", this.state.selectedType);
+      form.append("ownerId", this.state.user);
+      form.append("description", this.state.description);
+      form.append("job", this.state.selectedJob);
 
-        form.append("myImage", {uri: localUri, name: filename, type});
+      let localUri = this.state.image;
+      let filename = localUri.split("/").pop();
+      let match = /\.(\w+)$/.exec(filename);
+      let type = match ? `image/${match[1]}` : `image`;
 
-        const result = await PostService.create(form);
+      form.append("myImage", { uri: localUri, name: filename, type });
 
-        Alert.alert("Complete", "สร้างโพสต์เรียบร้อย", [
-            {
-                text: "OK",
-                onPress: () => this.props.setHide(false)
-            },
-        ])
+      const result = await PostService.create(form);
 
+      Alert.alert("Complete", "สร้างโพสต์เรียบร้อย", [
+        {
+          text: "OK",
+          onPress: () => this.props.setHide(false),
+        },
+      ]);
+    } catch (er) {
+      Alert.alert("Error", "กรอกข้อมูลไม่ถูกต้อง", [{ text: "OK" }]);
+      console.log(er);
     }
-    catch (er){
-        Alert.alert("Error", "กรอกข้อมูลไม่ถูกต้อง", [{ text: "OK" }]);
-        console.log(er)
-    }
-    // console.log(this.state)
   };
   render() {
     const LeftContent = (props) => (
@@ -146,9 +142,8 @@ class CreatePostModal extends React.Component {
     );
     return (
       <Modal
-        isVisible={true}
+        isOpen={true}
         onBackdropPress={() => this.props.setHide(false)}
-        style={{ backgroundColor: "white"}}
       >
         <ScrollView>
           <Card>
@@ -263,7 +258,7 @@ class CreatePostModal extends React.Component {
                     />
                 </Picker>
               </View>
-              
+
             </Card.Content>
             <Card.Content style={{marginTop: 10}}>
               <Card.Actions>
