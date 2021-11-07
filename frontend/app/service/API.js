@@ -11,7 +11,8 @@ const API = {
         delete: `${BASE_URL}/deleteuser/`
     },
     Post: {
-        create: `${BASE_URL}/post/create`
+        create: `${BASE_URL}/post/create`,
+        getAllPost: `${BASE_URL}/post`
     }
 }
 

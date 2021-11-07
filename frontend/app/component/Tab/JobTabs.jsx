@@ -5,33 +5,18 @@ import AllCarousel from "../Carousel/AllCarousel";
 import WorkerCarousel from "../Carousel/WorkerCarousel";
 import { Button, Provider } from "react-native-paper";
 import { Picker } from "@react-native-picker/picker";
+import PostService from "../../service/PostService";
 
 class JobTabs extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      dummyData: props.data,
       allData: [],
-      jobData: [
-        {
-          id: "0007",
-          OwnerName: "Nattawat Samsee",
-          Type: "FindJob",
-          position: "Network Security",
-          Status: "Available",
-          description: "ABCDEF",
-        },
-      ],
-      workerData: [
-        {
-          id: "0006",
-          OwnerName: "Nattawat Samsee",
-          Type: "FindWorker",
-          position: "Front-end developer",
-          Status: "Available",
-          description: "ABCDEF",
-        },
-      ],
+      jobData: [],
+      workerData: [],
+      checkData: false,
+      checkJob: false,
+      user: props.user,
       typeOfJob: [
         {
           id: "1001",
@@ -81,7 +66,22 @@ class JobTabs extends React.Component {
       selectedJob: "All",
       selectedWorker: "All",
     };
+    this.getAllPost();
   }
+
+  getAllPost = async () => {
+    try{
+      const result = await PostService.getAllPost();
+      const resultJob =  result.data.filter((data) => data.type == "findJob")
+      console.log(resultJob)
+      const resultWorker =  result.data.filter((data) => data.type == "hire")
+      this.setState({allData: result.data, jobData: resultJob, workerData: resultWorker, checkData: true})
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
+
   changeValue = (value, type) => {
     if (type === "All"){
       this.filterValueAll(value)
@@ -97,20 +97,7 @@ class JobTabs extends React.Component {
     }
   };
 
-  // Query from database
-  filterValueAll = (value) => {
-    console.log(value + " All");
-  }
-  filterValueJob = (value) => {
-    console.log(value + " Job");
-  }
-  filterValueWorker = (value) => {
-    console.log(value + " Worker");
-  }
 
-  componentDidMount() {
-    console.log(this.state.workerData);
-  }
   onValueChange = (value) => {
     this.setState({
       selected: value,
@@ -153,7 +140,9 @@ class JobTabs extends React.Component {
                   </Picker>
                 </View>
               </Provider>
-              <AllCarousel data={this.state.dummyData} />
+              {this.state.checkData && (
+                <AllCarousel user={this.props.user} data={this.state.allData} />
+              )}
             </Tabs.View>
             <Tabs.View>
               <Provider>
@@ -182,7 +171,9 @@ class JobTabs extends React.Component {
                   </Picker>
                 </View>
               </Provider>
-              <JobCarousel data={this.state.jobData} />
+              {this.state.checkData && (
+                <JobCarousel user={this.props.user} data={this.state.jobData} />
+              )}
             </Tabs.View>
             <Tabs.View>
               <Provider>
@@ -211,7 +202,7 @@ class JobTabs extends React.Component {
                   </Picker>
                 </View>
               </Provider>
-              <WorkerCarousel data={this.state.workerData} />
+              <WorkerCarousel user={this.props.user} data={this.state.workerData} />
             </Tabs.View>
           </Tabs.Views>
         </Tabs>
