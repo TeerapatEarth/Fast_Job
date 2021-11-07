@@ -8,6 +8,8 @@ import { FAB } from "react-native-paper";
 import AuthService from "../service/AuthService";
 import CreatePostModal from "../component/Modal/CreatePostModal";
 import Navbar from "../component/Appbar/Navbar";
+import PostService from "../service/PostService";
+
 const styles = StyleSheet.create({
   Header: {
     backgroundColor: "rgb(20,78,99)",
@@ -41,67 +43,28 @@ class Homepage extends React.Component {
       sessionUser: "",
       activeIndex: 0,
       modalSwitch: false,
-      dummyData: [
-        {
-          id: "0001",
-          OwnerName: "Nattawat Samsee",
-          Type: "FindJob",
-          position: "Front-end developer",
-          Status: "Available",
-          description: "ABCDEF",
-        },
-        {
-          id: "0002",
-          OwnerName: "Nattawat Samsee",
-          Type: "FindWorker",
-          position: "Front-end developer",
-          Status: "Available",
-          description: "ABCDEF",
-        },
-        {
-          id: "0003",
-          OwnerName: "Nattawat Samsee",
-          Type: "FindJob",
-          position: "Front-end developer",
-          Status: "Available",
-          description: "ABCDEF",
-        },
-        {
-          id: "0004",
-          OwnerName: "Nattawat Samsee",
-          Type: "FindWorker",
-          position: "Back-end developer",
-          Status: "Available",
-          description: "ABCDEF",
-        },
-        {
-          id: "0005",
-          OwnerName: "Nattawat Samsee",
-          Type: "FindJob",
-          position: "Front-end developer",
-          Status: "Available",
-          description: "ABCDEF",
-        },
-        {
-          id: "0006",
-          OwnerName: "Nattawat Samsee",
-          Type: "FindWorker",
-          position: "Front-end developer",
-          Status: "Available",
-          description: "ABCDEF",
-        },
-        {
-          id: "0007",
-          OwnerName: "Nattawat Samsee",
-          Type: "FindJob",
-          position: "Network Security",
-          Status: "Available",
-          description: "ABCDEF",
-        },
-      ],
+      allData: [],
     };
     this.session();
+    // this.getAllPost();
   }
+  
+  // componentDidMount = () => {
+  //   this.getAllPost();
+  // }
+
+  // getAllPost = async () => {
+  //   try{
+  //     const result = await PostService.getAllPost();
+  //     this.setState({allData: result.data})
+  //     console.log(this.state.allData)
+
+  //   }
+  //   catch(err){
+  //     console.log(err)
+  //   }
+  // }
+
   confirmLogout = () => {
     Alert.alert("Logout", "คุณต้องการออกจากระบบหรือไม่", [
       { text: "Logout", onPress: () => this.logout() },
@@ -152,7 +115,7 @@ class Homepage extends React.Component {
           <HeadCarousel />
 
           <Box mt={6}>
-            <JobTabs data={this.state.dummyData} />
+            <JobTabs user={this.state.sessionUser}/>
           </Box>
         </ScrollView>
         <FAB

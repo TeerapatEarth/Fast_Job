@@ -13,7 +13,8 @@ const API = {
         report: `${BASE_URL}/report/`
     },
     Post: {
-        create: `${BASE_URL}/post/create`
+        create: `${BASE_URL}/post/create`,
+        getAllPost: `${BASE_URL}/post`
     }
 }
 
