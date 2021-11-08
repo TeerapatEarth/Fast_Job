@@ -7,6 +7,14 @@ const API = {
     },
     User: {
         regis: `${BASE_URL}/register`,
+        update: `${BASE_URL}/updateuser/`,
+        delete: `${BASE_URL}/deleteuser/`,
+        oneUser: `${BASE_URL}/user/`,
+        report: `${BASE_URL}/report/`
+    },
+    Post: {
+        create: `${BASE_URL}/post/create`,
+        getAllPost: `${BASE_URL}/post`
     }
 }
 

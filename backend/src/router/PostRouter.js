@@ -7,6 +7,6 @@ const PostController = require("../controller/PostController");
 router.post("/post/create", uploadImage.single("myImage"), PostController.createPost);
 router.get("/post", PostController.getAllPost);
 router.get("/post/:id", PostController.getOnePost);
-router.put("/post/update/:id", PostController.updatePost);
+router.put("/post/update/:id",uploadImage.single("myImage"), PostController.updatePost);
 router.delete("/post/delete/:id", PostController.deletePost);
 module.exports = router;

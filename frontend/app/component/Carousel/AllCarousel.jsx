@@ -1,14 +1,24 @@
 import * as React from "react";
-import { View, StyleSheet, Dimensions, Button } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  Button,
+  Touchable,
+  TouchableOpacity,
+  Text,
+} from "react-native";
 import Carousel from "react-native-snap-carousel";
-import { Card, Paragraph } from "react-native-paper";
+import { Card, Paragraph, Avatar } from "react-native-paper";
+import { borderRadius, style, width } from "styled-system";
+import DescModal from "../Modal/DescModal";
 
 const horizontalMargin = 20;
 const slideWidth = 280;
 
 const sliderWidth = Dimensions.get("window").width;
 const itemWidth = slideWidth + horizontalMargin * 2;
-const itemHeight = "auto"
+const itemHeight = "auto";
 
 const styles = StyleSheet.create({
   slide: {
@@ -22,54 +32,56 @@ const styles = StyleSheet.create({
     flex: 1,
     // other styles for the inner container
   },
+  clickBtn: {
+    backgroundColor: "rgba(51,201,255, 0.5)",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 50,
+    elevation: 5,
+    marginBottom: 5,
+  },
+  detailBtn: {
+    backgroundColor: "rgba(51,201,255, 0.5)",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 50,
+    elevation: 10,
+  },
+  editBtn: {
+    backgroundColor: "rgba(51,201,255, 0.5)",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 50,
+    marginTop: 10,
+    elevation: 10,
+  },
 });
 class JobCarousel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      dummyData: props.data,
+      allData: props.data,
       activeIndex: 0,
       lengthData: 0,
+      modalSwitch: false,
+      toggle: false,
+      itemSelected: "",
     };
   }
-  componentDidMount() {
-    console.log(this.state.dummyData);
-  }
 
-  _renderItem({ item, index }) {
-    return (
-      <View style={styles.slide}>
-        <View style={styles.slideInnerContainer}>
-        <Card>
-          {item.Type == "FindJob" &&
-              <Card.Cover
-                source={require("../../assets/findjob.png")}
-                resizeMode="cover"
-                alt="job"
-              />
-            }
-            {item.Type == "FindWorker" &&
-              <Card.Cover
-                source={require("../../assets/findworker.png")}
-                resizeMode="cover"
-                alt="job"
-              />
-            }
-            <Card.Content>
-              <Paragraph>{"Posted by:  " + item.OwnerName}</Paragraph>
-              <Paragraph>{"Require:  "+item.position}</Paragraph>
-            </Card.Content>
-            
-            
-            <Card.Actions>
-              <Button title="See Detail" />
-            </Card.Actions>
-          </Card>
-        </View>
-      </View>
-    );
-  }
-
+  hide = (value) => {
+    this.setState({ modalSwitch: value });
+  };
+  openModal = (value) => {
+    // console.log(value)
+    this.setState({ modalSwitch: true, toggle: true, itemSelected: value });
+  };
   render() {
     return (
       <View>
@@ -81,13 +93,59 @@ class JobCarousel extends React.Component {
               this._carousel = c;
             }}
             layout={"stack"}
-            data={this.state.dummyData}
-            renderItem={this._renderItem}
+            data={this.state.allData}
+            renderItem={({ item, index }) => {
+              const LeftContent = (props) => (
+                <Avatar.Image size={48} source={{ uri: item.imgOwner }} />
+              );
+              return (
+                <View style={styles.slide}>
+                  <View style={styles.slideInnerContainer}>
+                    <Card>
+                      <Card.Cover
+                        source={{ uri: item.img }}
+                        resizeMode="cover"
+                        alt="job"
+                      />
+                      <Card.Title
+                        title={item.title}
+                        subtitle={item.first_name + " " + item.last_name}
+                        left={LeftContent}
+                      />
+                      <Card.Content style={{ margin: 15, paddingVertical: 15 }}>
+                        <TouchableOpacity
+                          style={styles.detailBtn}
+                          onPress={() => this.openModal(item)}
+                        >
+                          <Text style={{ color: "white", fontSize: 18 }}>
+                            See more detail
+                          </Text>
+                        </TouchableOpacity>
+                        {this.props.user._id == item.ownerId && (
+                          <TouchableOpacity style={styles.editBtn}
+                            onPress={() => console.log(this.props.user)}
+                          >
+                            <Text style={{ color: "white", fontSize: 18 }}>Edit Post</Text>
+                          </TouchableOpacity>
+                        )}
+                      </Card.Content>
+                    </Card>
+                  </View>
+                </View>
+              );
+            }}
             onSnapToItem={(index) => this.setState({ activeIndex: index })}
             sliderWidth={sliderWidth}
             itemWidth={itemWidth}
           />
         </View>
+        {this.state.modalSwitch && (
+          <DescModal
+            data={this.state.itemSelected}
+            setHide={this.hide}
+            hide={this.state.toggle}
+          />
+        )}
       </View>
     );
   }

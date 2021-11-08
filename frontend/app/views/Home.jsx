@@ -1,11 +1,15 @@
 import { Text, ScrollView, Box } from "native-base";
 import React, { Component } from "react";
-import { StyleSheet, Dimensions, View, Alert, } from "react-native";
+import { StyleSheet, Dimensions, View, Alert } from "react-native";
 import HeadCarousel from "../component/Carousel/HeadCarousel";
 import { Tabs, NativeBaseProvider, Center, Image } from "native-base";
 import JobTabs from "../component/Tab/JobTabs";
-import { FAB, Portal, Appbar, Avatar } from "react-native-paper";
+import { FAB } from "react-native-paper";
 import AuthService from "../service/AuthService";
+import CreatePostModal from "../component/Modal/CreatePostModal";
+import Navbar from "../component/Appbar/Navbar";
+import PostService from "../service/PostService";
+
 const styles = StyleSheet.create({
   Header: {
     backgroundColor: "rgb(20,78,99)",
@@ -38,67 +42,29 @@ class Homepage extends React.Component {
     this.state = {
       sessionUser: "",
       activeIndex: 0,
-      dummyData: [
-        {
-          id: "0001",
-          OwnerName: "Nattawat Samsee",
-          Type: "FindJob",
-          position: "Front-end developer",
-          Status: "Available",
-          description: "ABCDEF",
-        },
-        {
-          id: "0002",
-          OwnerName: "Nattawat Samsee",
-          Type: "FindWorker",
-          position: "Front-end developer",
-          Status: "Available",
-          description: "ABCDEF",
-        },
-        {
-          id: "0003",
-          OwnerName: "Nattawat Samsee",
-          Type: "FindJob",
-          position: "Front-end developer",
-          Status: "Available",
-          description: "ABCDEF",
-        },
-        {
-          id: "0004",
-          OwnerName: "Nattawat Samsee",
-          Type: "FindWorker",
-          position: "Back-end developer",
-          Status: "Available",
-          description: "ABCDEF",
-        },
-        {
-          id: "0005",
-          OwnerName: "Nattawat Samsee",
-          Type: "FindJob",
-          position: "Front-end developer",
-          Status: "Available",
-          description: "ABCDEF",
-        },
-        {
-          id: "0006",
-          OwnerName: "Nattawat Samsee",
-          Type: "FindWorker",
-          position: "Front-end developer",
-          Status: "Available",
-          description: "ABCDEF",
-        },
-        {
-          id: "0007",
-          OwnerName: "Nattawat Samsee",
-          Type: "FindJob",
-          position: "Network Security",
-          Status: "Available",
-          description: "ABCDEF",
-        },
-      ],
+      modalSwitch: false,
+      allData: [],
     };
     this.session();
+    // this.getAllPost();
   }
+  
+  // componentDidMount = () => {
+  //   this.getAllPost();
+  // }
+
+  // getAllPost = async () => {
+  //   try{
+  //     const result = await PostService.getAllPost();
+  //     this.setState({allData: result.data})
+  //     console.log(this.state.allData)
+
+  //   }
+  //   catch(err){
+  //     console.log(err)
+  //   }
+  // }
+
   confirmLogout = () => {
     Alert.alert("Logout", "คุณต้องการออกจากระบบหรือไม่", [
       { text: "Logout", onPress: () => this.logout() },
@@ -116,37 +82,28 @@ class Homepage extends React.Component {
   session = async () => {
     try {
       const result = await AuthService.session();
-      console.log(result.data);
       this.setState({ sessionUser: result.data });
     } catch (err) {
       Alert.alert("Error", "โปรดเข้าสู่ระบบ", [{ text: "OK" }]);
     }
   };
+  hide = (value) => {
+    this.setState({modalSwitch: value})
+  }
+  updateSession = (sec) => {
+    this.setState({sessionUser: sec})
+  }
   render() {
     return (
       <NativeBaseProvider>
-        <Appbar style={styles.bottom}>
-          <Image
-            size="xs"
-            source={{uri: this.state.sessionUser.img}}
-            alt="Alternate Text"
-            style={{borderRadius: 20}}
-          />
-          <Appbar.Content
-            title={this.state.sessionUser.user_name}
-            color="white"
-          />
-          <Appbar.Action
-            icon="bell"
-            color="white"
-            onPress={() => this.props.navigation.navigate("notify")}
-          />
-          <Appbar.Action
-            icon="power"
-            color="white"
-            onPress={() => this.confirmLogout()}
-          />
-        </Appbar>
+        <Navbar
+          img={this.state.sessionUser.img}
+          user_name={this.state.sessionUser.user_name}
+          logout={this.confirmLogout}
+          navigation={this.props.navigation}
+          session={this.state.sessionUser}
+          updateSec={this.updateSession}
+        ></Navbar>
         <ScrollView>
           <Box p={5} mb={3} style={styles.Header}>
             <Image
@@ -158,17 +115,22 @@ class Homepage extends React.Component {
           <HeadCarousel />
 
           <Box mt={6}>
-            <JobTabs data={this.state.dummyData} />
+            <JobTabs user={this.state.sessionUser}/>
           </Box>
         </ScrollView>
         <FAB
           style={styles.fab}
           large
           icon="plus"
-          onPress={() => console.log("kuy jeff")}
+          onPress={() => this.setState({modalSwitch: true})}
         />
+        {this.state.modalSwitch && (
+          <CreatePostModal user={this.state.sessionUser} setHide={this.hide}/>
+        )}
+        
       </NativeBaseProvider>
     );
   }
+  
 }
 export default Homepage;
