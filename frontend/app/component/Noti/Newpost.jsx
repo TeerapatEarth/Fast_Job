@@ -10,12 +10,17 @@ import {
   Button,
 } from "native-base";
 import AuthService from "../../service/AuthService";
+import DescModal from "../Modal/DescModal";
+import { TouchableRipple } from "react-native-paper";
 export default class Newpost extends Component {
   constructor(props) {
     super(props);
     this.state = {
       sessionUser: "",
       time: "",
+      modalDetail: false,
+      modalSwitch: false,
+      dataItem: "",
     };
     this.getSession();
   }
@@ -26,6 +31,9 @@ export default class Newpost extends Component {
     } catch (err) {
       console.log(err);
     }
+  };
+  setHide = (bool, item) => {
+    this.setState({ modalDetail: bool, modalSwitch: bool, dataItem: item });
   };
   render() {
     return (
@@ -46,14 +54,22 @@ export default class Newpost extends Component {
               py="2"
             >
               <HStack space={2}>
-                <Image
-                  size="md"
-                  source={{
-                    uri: item.img,
-                  }}
-                  alt="Alternate Text"
-                  style={{ borderRadius: 10 }}
-                />
+                <TouchableRipple
+                  onPress={() =>
+                    this.props.navigation.navigate("anotherProfile", {
+                      id: item.ownerId,
+                    })
+                  }
+                >
+                  <Image
+                    size="md"
+                    source={{
+                      uri: item.img,
+                    }}
+                    alt="Alternate Text"
+                    style={{ borderRadius: 40 }}
+                  />
+                </TouchableRipple>
                 <VStack style={{ width: 200 }}>
                   <Text
                     _dark={{
@@ -109,16 +125,21 @@ export default class Newpost extends Component {
                   <Button
                     size="sm"
                     alignSelf="center"
-                    onPress={() =>
-                      this.props.navigation.navigate("anotherProfile", {
-                        id: item.ownerId,
-                      })
-                    }
+                    onPress={() => {
+                      this.setHide(true, item);
+                    }}
                   >
                     Detail
                   </Button>
                 </VStack>
               </HStack>
+              {this.state.modalSwitch && (
+                <DescModal
+                  data={this.state.dataItem}
+                  setHide={this.setHide}
+                  hide={this.state.modalDetail}
+                ></DescModal>
+              )}
             </Box>
           )}
           keyExtractor={(item) => item._id}
