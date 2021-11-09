@@ -1,8 +1,6 @@
 import { Box, Tabs, View } from "native-base";
 import React, { Component } from "react";
-import JobCarousel from "../Carousel/JobCarousel";
 import AllCarousel from "../Carousel/AllCarousel";
-import WorkerCarousel from "../Carousel/WorkerCarousel";
 import { Button, Provider } from "react-native-paper";
 import { Picker } from "@react-native-picker/picker";
 import PostService from "../../service/PostService";
@@ -12,10 +10,9 @@ class JobTabs extends React.Component {
     super(props);
     this.state = {
       allData: [],
-      jobData: [],
-      workerData: [],
       checkData: false,
       checkJob: false,
+      checkWorkder: false,
       user: props.user,
       typeOfJob: [
         {
@@ -70,33 +67,31 @@ class JobTabs extends React.Component {
   }
 
   getAllPost = async () => {
-    try{
+    try {
       const result = await PostService.getAllPost();
-      const resultJob =  result.data.filter((data) => data.type == "findJob")
-      console.log(resultJob)
-      const resultWorker =  result.data.filter((data) => data.type == "hire")
-      this.setState({allData: result.data, jobData: resultJob, workerData: resultWorker, checkData: true})
-    }
-    catch(err){
-      console.log(err)
-    }
-  }
-
-  changeValue = (value, type) => {
-    if (type === "All"){
-      this.filterValueAll(value)
-      this.setState({ selectedAll: value });
-    }
-    else if (type === "Job"){
-      this.filterValueJob(value)
-      this.setState({ selectedJob: value })
-    }
-    else if (type === "Worker"){
-      this.filterValueWorker(value)
-      this.setState({ selectedWorker: value})
+      const resultJob = result.data.filter((data) => data.type == "findJob");
+      const resultWorker = result.data.filter((data) => data.type == "hire");
+      this.setState({
+        allData: result.data,
+        checkData: true,
+      });
+    } catch (err) {
+      console.log(err);
     }
   };
 
+  changeValue = (value, type) => {
+    if (type === "All") {
+      this.filterValueAll(value);
+      this.setState({ selectedAll: value });
+    } else if (type === "Job") {
+      this.filterValueJob(value);
+      this.setState({ selectedJob: value });
+    } else if (type === "Worker") {
+      this.filterValueWorker(value);
+      this.setState({ selectedWorker: value });
+    }
+  };
 
   onValueChange = (value) => {
     this.setState({
@@ -141,7 +136,11 @@ class JobTabs extends React.Component {
                 </View>
               </Provider>
               {this.state.checkData && (
-                <AllCarousel user={this.props.user} data={this.state.allData} />
+                <AllCarousel
+                  user={this.props.user}
+                  data={this.state.allData}
+                  type="all"
+                />
               )}
             </Tabs.View>
             <Tabs.View>
@@ -172,7 +171,13 @@ class JobTabs extends React.Component {
                 </View>
               </Provider>
               {this.state.checkData && (
-                <JobCarousel user={this.props.user} data={this.state.jobData} />
+                <View>
+                  <AllCarousel
+                    user={this.props.user}
+                    data={this.state.allData}
+                    type="findJob"
+                  />
+                </View>
               )}
             </Tabs.View>
             <Tabs.View>
@@ -202,7 +207,15 @@ class JobTabs extends React.Component {
                   </Picker>
                 </View>
               </Provider>
-              <WorkerCarousel user={this.props.user} data={this.state.workerData} />
+              {this.state.checkData && (
+                <View>
+                  <AllCarousel
+                    user={this.props.user}
+                    data={this.state.allData}
+                    type="hire"
+                  />
+                </View>
+              )}
             </Tabs.View>
           </Tabs.Views>
         </Tabs>

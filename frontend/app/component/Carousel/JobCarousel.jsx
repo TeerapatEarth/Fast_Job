@@ -66,13 +66,16 @@ class JobCarousel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      allData: props.data,
+      allData: props.data.filter((data) => data.type == "findJob"),
       activeIndex: 0,
       lengthData: 0,
       modalSwitch: false,
       toggle: false,
       itemSelected : ""
     };
+  }
+  componentDidMount(){
+    console.log(this.state.allData)
   }
 
   hide = (value) => {
