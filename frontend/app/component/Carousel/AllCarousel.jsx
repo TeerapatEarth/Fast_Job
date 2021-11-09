@@ -7,6 +7,7 @@ import {
   Touchable,
   TouchableOpacity,
   Text,
+  AppRegistry,
 } from "react-native";
 import Carousel from "react-native-snap-carousel";
 import { Card, Paragraph, Avatar } from "react-native-paper";
@@ -72,6 +73,7 @@ class JobCarousel extends React.Component {
       modalSwitch: false,
       toggle: false,
       itemSelected: "",
+      type: props.type,
     };
   }
 
@@ -82,6 +84,19 @@ class JobCarousel extends React.Component {
     // console.log(value)
     this.setState({ modalSwitch: true, toggle: true, itemSelected: value });
   };
+  componentDidMount(){
+    if (this.state.type == "all"){
+      this.setState({allData: this.props.data})
+    }
+    else if (this.state.type == "findJob"){
+      const result = this.props.data.filter((data) => data.type == "findJob")
+      this.setState({allData: result})
+    }
+    else if (this.state.type == "hire"){
+      const result = this.props.data.filter((data) => data.type == "hire")
+      this.setState({allData: result})
+    }
+  }
   render() {
     return (
       <View>
