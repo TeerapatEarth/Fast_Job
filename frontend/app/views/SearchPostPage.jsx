@@ -1,31 +1,44 @@
-import React, { Component } from "react";
 import {
-  Text,
   NativeBaseProvider,
   FlatList,
   Box,
   HStack,
   VStack,
   Image,
-  Button,
+  Text,
 } from "native-base";
-import AuthService from "../../service/AuthService";
-import DescModal from "../Modal/DescModal";
+import React, { Component } from "react";
+import { StyleSheet, Alert } from "react-native";
+import { Appbar } from "react-native-paper";
+import PostService from "../service/PostService";
 import { TouchableRipple } from "react-native-paper";
-export default class Newpost extends Component {
+import DescModal from "../component/Modal/DescModal";
+const styles = StyleSheet.create({
+  bottom: {
+    backgroundColor: "#26c5de",
+    height: 80,
+  },
+  arrow: {
+    marginTop: 55,
+    marginBottom: 30,
+  },
+});
+export default class SearchPostPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      sessionUser: "",
+      post: [],
       modalDetail: false,
       modalSwitch: false,
+      dataItem: ""
     };
-    this.getSession();
+    this.getPost();
   }
-  getSession = async () => {
+  getPost = async () => {
     try {
-      const result = await AuthService.session();
-      this.setState({ sessionUser: result.data });
+      const result = await PostService.getAllPost();
+      this.setState({ post: result.data });
+      console.log(this.state.post)
     } catch (err) {
       console.log(err);
     }
@@ -36,9 +49,15 @@ export default class Newpost extends Component {
   render() {
     return (
       <NativeBaseProvider>
+        <Appbar style={styles.bottom}>
+          <Appbar.BackAction
+            onPress={() => this.props.navigation.goBack()}
+            style={styles.arrow}
+          />
+        </Appbar>
         <FlatList
           style={{ borderBottomColor: "red" }}
-          data={this.state.sessionUser.notiNewPost}
+          data={this.state.post}
           renderItem={({ item }) => (
             <TouchableRipple onPress={() => this.setHide(true, item)}>
               <Box

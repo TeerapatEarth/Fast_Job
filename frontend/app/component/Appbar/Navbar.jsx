@@ -2,6 +2,7 @@ import { NativeBaseProvider, Image } from "native-base";
 import React, { Component } from "react";
 import { StyleSheet } from "react-native";
 import { Appbar, TouchableRipple } from "react-native-paper";
+import SearchPost from "../Modal/SearchPost";
 const styles = StyleSheet.create({
   bottom: {
     marginTop: 20,
@@ -10,6 +11,15 @@ const styles = StyleSheet.create({
   },
 });
 export default class Navbar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      modalSearch: false,
+    };
+  }
+  hidemodal = () => {
+    this.setState({modalSearch: false})
+  }
   render() {
     return (
       <Appbar style={styles.bottom}>
@@ -31,6 +41,11 @@ export default class Navbar extends Component {
         </TouchableRipple>
         <Appbar.Content title={this.props.user_name} color="white" />
         <Appbar.Action
+          icon="magnify"
+          color="white"
+          onPress={() => this.setState({modalSearch: true})}
+        />
+        <Appbar.Action
           icon="bell"
           color="white"
           onPress={() => this.props.navigation.navigate("notify")}
@@ -40,6 +55,7 @@ export default class Navbar extends Component {
           color="white"
           onPress={() => this.props.logout()}
         />
+        <SearchPost show={this.state.modalSearch} hide={this.hidemodal} navigation={this.props.navigation}></SearchPost>
       </Appbar>
     );
   }

@@ -8,6 +8,7 @@ import Notify from "./app/views/Notify"
 import CreatePost from "./app/views/CreatePost";
 import Profile from "./app/views/Profile"
 import AnotherProfile from "./app/views/AnotherProfile"
+import SearchPostPage from "./app/views/SearchPostPage";
 const Stack = createNativeStackNavigator();
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
         <Stack.Screen name={"createpost"} component={CreatePost}></Stack.Screen>
         <Stack.Screen name={"profile"} component={Profile}></Stack.Screen>
         <Stack.Screen name={"anotherProfile"} component={AnotherProfile}></Stack.Screen>
+        <Stack.Screen name={"search"} component={SearchPostPage}></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );
