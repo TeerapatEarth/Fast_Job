@@ -32,11 +32,11 @@ export default class SearchPostPage extends Component {
       modalSwitch: false,
       dataItem: ""
     };
-    this.getPost();
+    this.getPost(this.props.route.params.word);
   }
-  getPost = async () => {
+  getPost = async (word) => {
     try {
-      const result = await PostService.getAllPost();
+      const result = await PostService.searchPost(word);
       this.setState({ post: result.data });
       console.log(this.state.post)
     } catch (err) {
@@ -52,6 +52,10 @@ export default class SearchPostPage extends Component {
         <Appbar style={styles.bottom}>
           <Appbar.BackAction
             onPress={() => this.props.navigation.goBack()}
+            style={styles.arrow}
+          />
+          <Appbar.Content
+            title={this.props.route.params.word}
             style={styles.arrow}
           />
         </Appbar>

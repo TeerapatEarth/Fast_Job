@@ -10,11 +10,13 @@ const API = {
         update: `${BASE_URL}/updateuser/`,
         delete: `${BASE_URL}/deleteuser/`,
         oneUser: `${BASE_URL}/user/`,
-        report: `${BASE_URL}/report/`
+        report: `${BASE_URL}/report/`,
+        seeNotify: `${BASE_URL}/seenotifypost/`
     },
     Post: {
         create: `${BASE_URL}/post/create`,
-        getAllPost: `${BASE_URL}/post`
+        getAllPost: `${BASE_URL}/post`,
+        searchPost: `${BASE_URL}/post/search/`
     }
 }
 

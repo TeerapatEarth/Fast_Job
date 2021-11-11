@@ -9,6 +9,9 @@ class PostService {
     static async getAllPost(){
         return await axios.get(API.Post.getAllPost)
     }
+    static async searchPost(word){
+        return await axios.get(API.Post.searchPost+word)
+    }
 }
 
 export default PostService;
