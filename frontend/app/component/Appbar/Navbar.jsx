@@ -71,6 +71,11 @@ export default class Navbar extends Component {
         </TouchableRipple>
         <Appbar.Content title={this.props.user_name} color="white" />
         <Appbar.Action
+          icon="account"
+          color="white"
+          onPress={() => this.props.navigation.navigate("admin")}
+        />
+        <Appbar.Action
           icon="magnify"
           color="white"
           onPress={() => this.setState({ modalSearch: true })}

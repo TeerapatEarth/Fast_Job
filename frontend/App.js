@@ -8,6 +8,7 @@ import CreatePost from "./app/views/CreatePost";
 import Profile from "./app/views/Profile";
 import AnotherProfile from "./app/views/AnotherProfile";
 import SearchPostPage from "./app/views/SearchPostPage";
+import Admin from "./app/views/Admin"
 const Stack = createNativeStackNavigator();
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
           component={AnotherProfile}
         ></Stack.Screen>
         <Stack.Screen name={"search"} component={SearchPostPage}></Stack.Screen>
+        <Stack.Screen name={"admin"} component={Admin}></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );
