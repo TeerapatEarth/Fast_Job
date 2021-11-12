@@ -151,6 +151,15 @@ const PostController = {
       console.log(err);
     }
   },
+  searchPost: async function (req, res, next){
+    try{
+      const {search} = req.params
+      const post = await Post.find({title: { $regex: '.*' + search + '.*', $options: 'i' }})
+      res.status(201).json(post)
+    } catch (err){
+      console.log(err)
+    }
+  }
 };
 
 module.exports = PostController;

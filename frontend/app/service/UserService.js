@@ -18,6 +18,9 @@ class UserService {
     static async reportUser(id){
         return await axios.put(API.User.report+id)
     }
+    static async seeNotify(id){
+        return await axios.put(API.User.seeNotify+id)
+    }
 }
 
 export default UserService

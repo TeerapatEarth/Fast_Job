@@ -14,5 +14,6 @@ router.delete('/deleteuser/:id', UserController.deleteUser)
 router.put('/report/:id', UserController.report)
 router.put('/ban/:id', UserController.banUser)
 router.put('/unban/:id', UserController.unBanUser)
+router.put('/seenotifypost/:id', UserController.seeNotiPost)
 
 module.exports = router

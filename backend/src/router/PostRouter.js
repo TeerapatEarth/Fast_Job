@@ -9,4 +9,5 @@ router.get("/post", PostController.getAllPost);
 router.get("/post/:id", PostController.getOnePost);
 router.put("/post/update/:id",uploadImage.single("myImage"), PostController.updatePost);
 router.delete("/post/delete/:id", PostController.deletePost);
+router.get("/post/search/:search",PostController.searchPost);
 module.exports = router;
