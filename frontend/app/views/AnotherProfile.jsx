@@ -15,6 +15,7 @@ import { Appbar } from "react-native-paper";
 import React, { Component } from "react";
 import { StyleSheet, Alert } from "react-native";
 import UserService from "../service/UserService";
+import AuthService from "../service/AuthService";
 const styles = StyleSheet.create({
   bottom: {
     backgroundColor: "#26c5de",
@@ -30,9 +31,23 @@ export default class AnotherProfile extends Component {
     super(props);
     this.state = {
       user: "",
+      id: "",
+      showReport: false,
     };
+    this.session()
     this.getUser(this.props.route.params.id);
   }
+  session = async () => {
+    try {
+      const result = await AuthService.session();
+      this.setState({ id: result.data._id });
+      if (this.state.id !== this.props.route.params.id) {
+        this.setState({ showReport: true });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
   getUser = async (id) => {
     try {
       const result = await UserService.getOneUser(id);
@@ -42,17 +57,17 @@ export default class AnotherProfile extends Component {
     }
   };
   reportUser = async (id) => {
-    try{
-      await UserService.reportUser(id)
+    try {
+      await UserService.reportUser(id);
       Alert.alert("Report user complete", "รายงานผู้ใช้สำเร็จ", [
         {
-          text: "Close"
-        }
-      ])
-    } catch (err){
-      console.log(err)
+          text: "Close",
+        },
+      ]);
+    } catch (err) {
+      console.log(err);
     }
-  }
+  };
   render() {
     return (
       <NativeBaseProvider>
@@ -92,14 +107,16 @@ export default class AnotherProfile extends Component {
                     {this.state.user.email}
                   </Text>
                 </Box>
-                <Button
-                  width="85%"
-                  colorScheme="red"
-                  _text={{ color: "white" }}
-                  onPress={() => this.reportUser(this.props.route.params.id)}
-                >
-                  Report User
-                </Button>
+                {this.state.showReport && (
+                  <Button
+                    width="85%"
+                    colorScheme="red"
+                    _text={{ color: "white" }}
+                    onPress={() => this.reportUser(this.props.route.params.id)}
+                  >
+                    Report User
+                  </Button>
+                )}
               </Box>
             </Stack>
           </Center>

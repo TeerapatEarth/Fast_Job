@@ -11,12 +11,20 @@ const API = {
         delete: `${BASE_URL}/deleteuser/`,
         oneUser: `${BASE_URL}/user/`,
         report: `${BASE_URL}/report/`,
-        seeNotify: `${BASE_URL}/seenotifypost/`
+        seeNotify: `${BASE_URL}/seenotifypost/`,
+        getAllUser: `${BASE_URL}/user`,
+        ban: `${BASE_URL}/ban/`,
+        unBan: `${BASE_URL}/unban/`
     },
     Post: {
         create: `${BASE_URL}/post/create`,
         getAllPost: `${BASE_URL}/post`,
         searchPost: `${BASE_URL}/post/search/`
+    },
+    Job: {
+        getJob: `${BASE_URL}/job`,
+        create: `${BASE_URL}/job/create`,
+        delete: `${BASE_URL}/job/delete/`
     }
 }
 

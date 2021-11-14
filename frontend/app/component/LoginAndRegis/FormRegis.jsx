@@ -12,10 +12,11 @@ import {
   Box,
 } from "native-base";
 import React, { Component } from "react";
-import { StyleSheet, Image, } from "react-native";
+import { StyleSheet, Image } from "react-native";
 import UserService from "../../service/UserService";
 import { Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import JobService from "../../service/JobService";
 export default class FormRegis extends Component {
   constructor(props) {
     super(props);
@@ -31,8 +32,35 @@ export default class FormRegis extends Component {
       month: "",
       year: "",
       img: null,
+      dayArr: [],
+      monthArr: [],
+      yearArr: [],
+      jobArr: [],
     };
+    this.getYear();
+    this.getAllJob();
   }
+  getYear = () => {
+    var currentYear = new Date().getFullYear();
+    var stopYear = 1920;
+    while (currentYear >= stopYear) {
+      this.state.yearArr.push(currentYear.toString());
+      currentYear--;
+    }
+    var start = 1;
+    while (start <= 31) {
+      this.state.dayArr.push(start.toString());
+      start++;
+    }
+  };
+  getAllJob = async () => {
+    try {
+      const result = await JobService.getJob();
+      this.setState({ jobArr: result.data });
+    } catch (err) {
+      console.log(err);
+    }
+  };
   pickImage = async () => {
     if (Platform.OS !== "web") {
       const {
@@ -72,15 +100,15 @@ export default class FormRegis extends Component {
             text: "OK",
           },
         ]);
-        return 0
+        return 0;
       }
-      if(this.state.password != this.state.confirmPassword){
+      if (this.state.password != this.state.confirmPassword) {
         Alert.alert("Error", "รหัสผ่านไม่ตรงกัน", [
           {
             text: "OK",
-          }
-        ])
-        return 0
+          },
+        ]);
+        return 0;
       }
       const fd = new FormData();
       fd.append("user_name", this.state.user_name);
@@ -213,18 +241,13 @@ export default class FormRegis extends Component {
                   style={styles.bgInput}
                   onValueChange={(value) => this.setState({ job: value })}
                 >
-                  <Select.Item
-                    label="Front-end Developer"
-                    value="Front-end Developer"
-                  ></Select.Item>
-                  <Select.Item
-                    label="Back-end Developer"
-                    value="Back-end Developer"
-                  ></Select.Item>
-                  <Select.Item
-                    label="Full Stack Developer"
-                    value="Full Stack Developer"
-                  ></Select.Item>
+                  {this.state.jobArr.map((item) => (
+                    <Select.Item
+                      key={item._id}
+                      label={item.job}
+                      value={item.job}
+                    ></Select.Item>
+                  ))}
                 </Select>
               </FormControl>
               <Box style={{ flexDirection: "row" }}>
@@ -237,37 +260,13 @@ export default class FormRegis extends Component {
                     style={styles.bgInput}
                     onValueChange={(value) => this.setState({ day: value })}
                   >
-                    <Select.Item label="1" value="1"></Select.Item>
-                    <Select.Item label="2" value="2"></Select.Item>
-                    <Select.Item label="3" value="3"></Select.Item>
-                    <Select.Item label="4" value="4"></Select.Item>
-                    <Select.Item label="5" value="5"></Select.Item>
-                    <Select.Item label="6" value="6"></Select.Item>
-                    <Select.Item label="7" value="7"></Select.Item>
-                    <Select.Item label="8" value="8"></Select.Item>
-                    <Select.Item label="9" value="9"></Select.Item>
-                    <Select.Item label="10" value="10"></Select.Item>
-                    <Select.Item label="11" value="11"></Select.Item>
-                    <Select.Item label="12" value="12"></Select.Item>
-                    <Select.Item label="13" value="13"></Select.Item>
-                    <Select.Item label="14" value="14"></Select.Item>
-                    <Select.Item label="15" value="15"></Select.Item>
-                    <Select.Item label="16" value="16"></Select.Item>
-                    <Select.Item label="17" value="17"></Select.Item>
-                    <Select.Item label="18" value="18"></Select.Item>
-                    <Select.Item label="19" value="19"></Select.Item>
-                    <Select.Item label="20" value="20"></Select.Item>
-                    <Select.Item label="21" value="21"></Select.Item>
-                    <Select.Item label="22" value="22"></Select.Item>
-                    <Select.Item label="23" value="23"></Select.Item>
-                    <Select.Item label="24" value="24"></Select.Item>
-                    <Select.Item label="25" value="25"></Select.Item>
-                    <Select.Item label="26" value="26"></Select.Item>
-                    <Select.Item label="27" value="27"></Select.Item>
-                    <Select.Item label="28" value="28"></Select.Item>
-                    <Select.Item label="29" value="29"></Select.Item>
-                    <Select.Item label="30" value="30"></Select.Item>
-                    <Select.Item label="31" value="31"></Select.Item>
+                    {this.state.dayArr.map((item) => (
+                      <Select.Item
+                        key={item}
+                        label={item}
+                        value={item}
+                      ></Select.Item>
+                    ))}
                   </Select>
                 </FormControl>
                 <FormControl isRequired width="47%" mr={4}>
@@ -303,7 +302,13 @@ export default class FormRegis extends Component {
                   style={styles.bgInput}
                   onValueChange={(value) => this.setState({ year: value })}
                 >
-                  <Select.Item label="2021" value="2021"></Select.Item>
+                  {this.state.yearArr.map((item) => (
+                    <Select.Item
+                      key={item}
+                      label={item}
+                      value={item}
+                    ></Select.Item>
+                  ))}
                 </Select>
               </FormControl>
               <Button width="100%" mb="1" mt="3" onPress={() => this.regis()}>

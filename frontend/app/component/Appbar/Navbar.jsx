@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native";
 import { Appbar, TouchableRipple, Badge, Box } from "react-native-paper";
 import SearchPost from "../Modal/SearchPost";
 import AuthService from "../../service/AuthService";
-import UserService from "../../service/UserService"
+import UserService from "../../service/UserService";
 const styles = StyleSheet.create({
   bottom: {
     marginTop: 20,
@@ -19,6 +19,7 @@ export default class Navbar extends Component {
       modalSearch: false,
       countNoti: 0,
       checkNoti: false,
+      admin: false,
     };
     this.session();
   }
@@ -28,11 +29,13 @@ export default class Navbar extends Component {
       const arrNoti = result.data.notiNewPost;
       const noSee = arrNoti.filter((item) => item.seeByUser == false);
       const count = noSee.length;
-      if(count == 0){
-        this.setState({ countNoti: count, });
-      }
-      else{
+      if (count == 0) {
+        this.setState({ countNoti: count });
+      } else {
         this.setState({ countNoti: count, checkNoti: true });
+      }
+      if(result.data.role === "Admin"){
+        this.setState({admin: true})
       }
     } catch (err) {
       console.log(err);
@@ -43,8 +46,8 @@ export default class Navbar extends Component {
   };
   goToNotiPage = async (id) => {
     try {
-      if(this.state.countNoti != 0){
-        await UserService.seeNotify(id)
+      if (this.state.countNoti != 0) {
+        await UserService.seeNotify(id);
       }
       this.setState({ countNoti: 0, checkNoti: false });
       this.props.navigation.navigate("notify");
@@ -58,7 +61,6 @@ export default class Navbar extends Component {
             this.props.navigation.navigate("profile", {
               session: this.props.session,
               update: this.props.updateSec,
-              goBack: this.props.navigation.goBack,
             })
           }
         >
@@ -70,6 +72,13 @@ export default class Navbar extends Component {
           />
         </TouchableRipple>
         <Appbar.Content title={this.props.user_name} color="white" />
+        {this.state.admin && (
+          <Appbar.Action
+            icon="account"
+            color="white"
+            onPress={() => this.props.navigation.navigate("admin", this.props.session)}
+          />
+        )}
         <Appbar.Action
           icon="magnify"
           color="white"
