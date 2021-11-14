@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
+import { FontAwesome } from '@expo/vector-icons';
 import User from "./User";
-import Post from "./Post"
+import Addjob from "./AddJob"
 const Tab = createBottomTabNavigator();
 export default class AdminPage extends Component {
   render() {
@@ -15,21 +15,17 @@ export default class AdminPage extends Component {
           options={{
             tabBarIcon: ({ color, size }) => {
               return (
-                <MaterialIcons
-                  name="local-post-office"
-                  size={20}
-                  color={color}
-                />
+                <FontAwesome name="users" size={20} color={color} />
               );
             },
           }}
         ></Tab.Screen>
         <Tab.Screen
-          name={"Post"}
-          component={Post}
+          name={"Add job"}
+          component={Addjob}
           options={{
             tabBarIcon: ({ color, size }) => {
-              return <Entypo name="briefcase" size={20} color={color} />;
+              return <MaterialIcons name="local-post-office" size={20} color={color} />;
             },
           }}
         ></Tab.Screen>
