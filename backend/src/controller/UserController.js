@@ -199,6 +199,18 @@ const UserController = {
       console.log(err);
     }
   },
+  seeNotiPost: async function (req, res, next){
+    try {
+      const { id } = req.params;
+      const user = await User.findById(id)
+      const arrNoti = user.notiNewPost
+      arrNoti.map((item) => item.seeByUser = true)
+      await User.findByIdAndUpdate(id, {notiNewPost: arrNoti})
+      res.status(201).send("User see notify")
+    } catch (err){
+      console.log(err)
+    }
+  }
 };
 
 module.exports = UserController;

@@ -67,6 +67,9 @@ class Homepage extends React.Component {
     try {
       const result = await AuthService.session();
       this.setState({ sessionUser: result.data });
+      if(result.data.ban){
+        Alert.alert("Error", "บัญชีของคุณถูกระงับ", [{ text: "OK", onPress: () => this.logout() }]);
+      }
     } catch (err) {
       Alert.alert("Error", "โปรดเข้าสู่ระบบ", [{ text: "OK" }]);
     }

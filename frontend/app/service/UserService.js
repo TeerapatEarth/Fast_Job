@@ -18,6 +18,18 @@ class UserService {
     static async reportUser(id){
         return await axios.put(API.User.report+id)
     }
+    static async seeNotify(id){
+        return await axios.put(API.User.seeNotify+id)
+    }
+    static async getAllUser(){
+        return await axios.get(API.User.getAllUser)
+    }
+    static async banUser(id){
+        return await axios.put(API.User.ban+id)
+    }
+    static async unBan(id){
+        return await axios.put(API.User.unBan+id)
+    }
 }
 
 export default UserService
