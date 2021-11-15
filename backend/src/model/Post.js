@@ -12,7 +12,8 @@ const postSchema = new mongoose.Schema({
     status: { type: Boolean, default: true },
     createDate: { type: String, default: "" },
     createTime: { type: String, default: ""},
-    img:{ type: String, default: null}
+    img:{ type: String, default: null},
+    requestUser: {type: Array, default: []}
 })
 
 module.exports = mongoose.model('post', postSchema);
