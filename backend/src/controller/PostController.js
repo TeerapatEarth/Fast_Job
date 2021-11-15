@@ -58,6 +58,7 @@ const PostController = {
             createTime: post.createTime,
             job: post.job,
             img: post.img,
+            requestUser: [],
             seeByUser: false,
           };
           arrNotiPost.push(notiPost);
@@ -127,6 +128,7 @@ const PostController = {
           createTime: post.createTime,
           job: post.job,
           img: post.img,
+          requestUser: [],
           seeByUser: false,
         });
         await User.findByIdAndUpdate(item._id, { notiNewPost: newNotiArr });
@@ -160,6 +162,117 @@ const PostController = {
       const {search} = req.params
       const post = await Post.find({title: { $regex: '.*' + search + '.*', $options: 'i' }})
       res.status(201).json(post)
+    } catch (err){
+      console.log(err)
+    }
+  },
+  addUser: async function (req, res, next){
+    try{
+      const { id } = req.params
+      const obj = req.body
+      const post = await Post.findById(id)
+      const arrRequestUser = post.requestUser
+      arrRequestUser.push(obj)
+      await Post.findByIdAndUpdate(id, {requestUser: arrRequestUser})
+      const userNoti = await User.find({ job: obj.job })
+      userNoti.map(async (item) => {
+        const newArr = item.notiNewPost
+        for(var i = 0 ; i < newArr.length ; i ++){
+          if(newArr[i]._id == id){
+            newArr[i].requestUser.push(obj)
+            break;
+          }
+        }
+        await User.findByIdAndUpdate(item._id, {notiNewPost: newArr})
+      })
+      res.status(201).send("Add user complete")
+    } catch(err){
+      console.log(err)
+    }
+  },
+  cancleUser: async function (req, res, next){
+    try{
+      const { id } = req.params
+      const obj = req.body
+      const post = await Post.findById(id)
+      const arrReauest = post.requestUser
+      for (var i = 0 ; i < arrReauest.length ; i++){
+        if(arrReauest[i]._id == obj._id){
+          arrReauest.splice(i, 1)
+          break;
+        }
+      }
+      await Post.findByIdAndUpdate(id, {requestUser: arrReauest})
+      const userNoti = await User.find({job: obj.job})
+      userNoti.map(async (item) => {
+        const newArr = item.notiNewPost
+        for(var i = 0 ; i < newArr.length ; i ++){
+          if(newArr[i]._id == id){
+            for(var j = 0 ; j < newArr[i].requestUser.length; j++){
+              if(newArr[i].requestUser[j]._id == obj._id){
+                newArr[i].requestUser.splice(j, 1)
+                break;
+              }
+            }
+            break;
+          }
+        }
+        await User.findByIdAndUpdate(item._id, {notiNewPost: newArr})
+      })
+      res.status(201).send("Cancle user complete")
+    } catch (err){
+      console.log(err)
+    }
+  },
+  applyUser : async function (req, res, next){
+    try{
+      const { id } = req.params
+      const obj = req.body
+      const post = await Post.findById(id)
+      const arrRequest = post.requestUser
+      for(var i = 0 ; i < arrRequest.length ; i ++){
+        if(arrRequest[i]._id == obj._id){
+          arrRequest[i].status = true
+          break;
+        }
+      }
+      await Post.findByIdAndUpdate(id, {requestUser: arrRequest})
+      const newPost = await Post.findById(id)
+      const userNoti = await User.find({job: obj.job})
+      userNoti.map(async (item) => {
+        const newArr = item.notiNewPost
+        for(var i = 0 ; i < newArr.length ; i ++){
+          if(newArr[i]._id == id){
+            for(var j = 0 ; j < newArr[i].requestUser.length; j++){
+              if(newArr[i].requestUser[j]._id == obj._id){
+                newArr[i].requestUser[j].status = true
+                break;
+              }
+            }
+            break;
+          }
+        }
+        const newArrJob = item.notiJob
+        newArrJob.push({
+          _id: newPost._id,
+          title: newPost.title,
+          description: newPost.description,
+          type: newPost.type,
+          ownerId: newPost.ownerId,
+          first_name: newPost.first_name,
+          last_name: newPost.last_name,
+          imgOwner: newPost.imgOwner,
+          status: newPost.status,
+          createDate: newPost.createDate,
+          createTime: newPost.createTime,
+          job: newPost.job,
+          img: newPost.img,
+          requestUser: [],
+          seeByUser: false,
+        })
+        await User.findByIdAndUpdate(item._id, {notiNewPost: newArr, notiJob: newArrJob})
+      })
+      res.status(201).send("Apply user complete")
     } catch (err){
       console.log(err)
     }
