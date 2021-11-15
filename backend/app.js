@@ -19,6 +19,10 @@ app.use(
     },
   })
 );
+app.use((req, res, next) => {
+  console.log(req.path)
+  next()
+})
 
 app.use((req, res, next) => {
   console.log(req.path)

@@ -44,27 +44,11 @@ class Homepage extends React.Component {
       activeIndex: 0,
       modalSwitch: false,
       allData: [],
+      value: 0,
     };
     this.session();
-    // this.getAllPost();
   }
   
-  // componentDidMount = () => {
-  //   this.getAllPost();
-  // }
-
-  // getAllPost = async () => {
-  //   try{
-  //     const result = await PostService.getAllPost();
-  //     this.setState({allData: result.data})
-  //     console.log(this.state.allData)
-
-  //   }
-  //   catch(err){
-  //     console.log(err)
-  //   }
-  // }
-
   confirmLogout = () => {
     Alert.alert("Logout", "คุณต้องการออกจากระบบหรือไม่", [
       { text: "Logout", onPress: () => this.logout() },
@@ -96,6 +80,10 @@ class Homepage extends React.Component {
   updateSession = (sec) => {
     this.setState({sessionUser: sec})
   }
+  change = () => {
+    this.child.setState({checkData: false})
+    this.child.getAllPost();
+  }
   render() {
     return (
       <NativeBaseProvider>
@@ -118,7 +106,7 @@ class Homepage extends React.Component {
           <HeadCarousel />
 
           <Box mt={6}>
-            <JobTabs user={this.state.sessionUser}/>
+            <JobTabs user={this.state.sessionUser} change={this.state.value} onRef={(ref) => this.child = ref} />
           </Box>
         </ScrollView>
         <FAB
@@ -128,7 +116,7 @@ class Homepage extends React.Component {
           onPress={() => this.setState({modalSwitch: true})}
         />
         {this.state.modalSwitch && (
-          <CreatePostModal user={this.state.sessionUser} setHide={this.hide}/>
+          <CreatePostModal user={this.state.sessionUser} setHide={this.hide} reRenderPost={this.change} />
         )}
         
       </NativeBaseProvider>

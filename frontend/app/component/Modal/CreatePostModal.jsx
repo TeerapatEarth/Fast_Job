@@ -24,6 +24,7 @@ class CreatePostModal extends React.Component {
       description: "",
       selectedJob: "Front-end Developer",
       selectedType: "findJob",
+      change: props.change,
       typeOfJob: [
         {
           id: "1001",
@@ -125,7 +126,7 @@ class CreatePostModal extends React.Component {
       Alert.alert("Complete", "สร้างโพสต์เรียบร้อย", [
         {
           text: "OK",
-          onPress: () => this.props.setHide(false),
+          onPress: () => this.closeModal()
         },
       ]);
     } catch (er) {
@@ -133,6 +134,13 @@ class CreatePostModal extends React.Component {
       console.log(er);
     }
   };
+
+  closeModal = () => {
+    this.props.reRenderPost();
+    this.props.setHide(false)
+  }
+
+  
   render() {
     const LeftContent = (props) => (
       <TouchableOpacity onPress={() => this.props.setHide(false)}>
