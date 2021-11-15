@@ -131,7 +131,11 @@ const PostController = {
         });
         await User.findByIdAndUpdate(item._id, { notiNewPost: newNotiArr });
       });
-      res.status(201).send("Update post completed");
+      const sendBack = {
+        status: "Update post completed",
+        image: img
+      }
+      res.status(201).send(sendBack);
     } catch (err) {
       console.log(err);
     }

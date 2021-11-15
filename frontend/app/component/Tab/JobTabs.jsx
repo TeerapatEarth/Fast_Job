@@ -4,6 +4,7 @@ import AllCarousel from "../Carousel/AllCarousel";
 import { Button, Provider } from "react-native-paper";
 import { Picker } from "@react-native-picker/picker";
 import PostService from "../../service/PostService";
+import { Text } from "react-native"
 
 class JobTabs extends React.Component {
   constructor(props) {
@@ -14,7 +15,13 @@ class JobTabs extends React.Component {
       checkJob: false,
       checkWorkder: false,
       user: props.user,
+      checkUpdate: 0,
+      keepData: [],
       typeOfJob: [
+        {
+          id: "1000",
+          jobName: "All",
+        },
         {
           id: "1001",
           jobName: "Front-end Developer",
@@ -59,20 +66,23 @@ class JobTabs extends React.Component {
       allLength: 0,
       jobLength: 0,
       workLength: 0,
-      selectedAll: "All",
-      selectedJob: "All",
-      selectedWorker: "All",
     };
+  }
+
+  componentDidMount(){
     this.getAllPost();
+    this.props.onRef(this)
+  }
+  componentWillUnmount(){
+    this.props.onRef(null);
   }
 
   getAllPost = async () => {
     try {
       const result = await PostService.getAllPost();
-      const resultJob = result.data.filter((data) => data.type == "findJob");
-      const resultWorker = result.data.filter((data) => data.type == "hire");
       this.setState({
         allData: result.data,
+        keepData: result.data,
         checkData: true,
       });
     } catch (err) {
@@ -80,24 +90,6 @@ class JobTabs extends React.Component {
     }
   };
 
-  changeValue = (value, type) => {
-    if (type === "All") {
-      this.filterValueAll(value);
-      this.setState({ selectedAll: value });
-    } else if (type === "Job") {
-      this.filterValueJob(value);
-      this.setState({ selectedJob: value });
-    } else if (type === "Worker") {
-      this.filterValueWorker(value);
-      this.setState({ selectedWorker: value });
-    }
-  };
-
-  onValueChange = (value) => {
-    this.setState({
-      selected: value,
-    });
-  };
   render() {
     return (
       <Box>
@@ -109,32 +101,6 @@ class JobTabs extends React.Component {
           </Tabs.Bar>
           <Tabs.Views>
             <Tabs.View>
-              <Provider>
-                <View
-                  style={{
-                    margin: 15,
-                    padding: 15,
-                    borderRadius: 10,
-                    backgroundColor: "rgba(51,201,255, 0.2)",
-                  }}
-                >
-                  <Picker
-                    selectedValue={this.state.selectedAll}
-                    onValueChange={(itemValue, itemIndex) =>
-                      this.changeValue(itemValue, "All")
-                    }
-                  >
-                    <Picker.Item label="All" value="All" />
-                    {this.state.typeOfJob.map((job) => (
-                      <Picker.Item
-                        key={job.id}
-                        label={job.jobName}
-                        value={job.jobName}
-                      />
-                    ))}
-                  </Picker>
-                </View>
-              </Provider>
               {this.state.checkData && (
                 <AllCarousel
                   user={this.props.user}
@@ -144,32 +110,6 @@ class JobTabs extends React.Component {
               )}
             </Tabs.View>
             <Tabs.View>
-              <Provider>
-                <View
-                  style={{
-                    margin: 15,
-                    padding: 15,
-                    borderRadius: 10,
-                    backgroundColor: "rgba(51,201,255, 0.2)",
-                  }}
-                >
-                  <Picker
-                    selectedValue={this.state.selectedJob}
-                    onValueChange={(itemValue, itemIndex) =>
-                      this.changeValue(itemValue, "Job")
-                    }
-                  >
-                    <Picker.Item label="All" value="All" />
-                    {this.state.typeOfJob.map((job) => (
-                      <Picker.Item
-                        key={job.id}
-                        label={job.jobName}
-                        value={job.jobName}
-                      />
-                    ))}
-                  </Picker>
-                </View>
-              </Provider>
               {this.state.checkData && (
                 <View>
                   <AllCarousel
@@ -190,25 +130,12 @@ class JobTabs extends React.Component {
                     backgroundColor: "rgba(51,201,255, 0.2)",
                   }}
                 >
-                  <Picker
-                    selectedValue={this.state.selectedWorker}
-                    onValueChange={(itemValue, itemIndex) =>
-                      this.changeValue(itemValue, "Worker")
-                    }
-                  >
-                    <Picker.Item label="All" value="All" />
-                    {this.state.typeOfJob.map((job) => (
-                      <Picker.Item
-                        key={job.id}
-                        label={job.jobName}
-                        value={job.jobName}
-                      />
-                    ))}
-                  </Picker>
+                
                 </View>
               </Provider>
               {this.state.checkData && (
                 <View>
+                  <Text> </Text>
                   <AllCarousel
                     user={this.props.user}
                     data={this.state.allData}

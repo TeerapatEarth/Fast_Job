@@ -14,7 +14,9 @@ const API = {
     },
     Post: {
         create: `${BASE_URL}/post/create`,
-        getAllPost: `${BASE_URL}/post`
+        getAllPost: `${BASE_URL}/post`,
+        editPost: `${BASE_URL}/post/update/`,
+        deletePost: `${BASE_URL}/post/delete/`
     }
 }
 
