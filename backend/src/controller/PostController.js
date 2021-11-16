@@ -168,12 +168,38 @@ const PostController = {
   },
   addUser: async function (req, res, next){
     try{
+      // เพิ่มการ request จาก user มาเข้า requestUser ใน post
       const { id } = req.params
       const obj = req.body
       const post = await Post.findById(id)
       const arrRequestUser = post.requestUser
       arrRequestUser.push(obj)
       await Post.findByIdAndUpdate(id, {requestUser: arrRequestUser})
+
+      //แจ้งเตือนไปยังเจ้าของโพสต์
+      const user = await User.findById(post.ownerId)
+      const newArrJob = user.notiJob
+      newArrJob.push({
+        _id: obj._id,
+        user_name: obj.user_name,
+        first_name: obj.first_name,
+        last_name: obj.last_name,
+        email: obj.email,
+        job: obj.job,
+        img: obj.img,
+        status: false,
+        seeByUser: false,
+        type: post.type,
+        imgPost: post.img,
+        title: post.title,
+        description: post.description,
+        createDate: post.createDate,
+        createTime: post.createTime,
+        requestPost: true
+      })
+      await User.findByIdAndUpdate(post.ownerId, {notiJob: newArrJob})
+
+      //แก้ไข requestUser ใน post ที่อยู่ใน noti ของแต่ละ user ทีเกี่ยวกับงาน
       const userNoti = await User.find({ job: obj.job })
       userNoti.map(async (item) => {
         const newArr = item.notiNewPost
@@ -192,6 +218,7 @@ const PostController = {
   },
   cancleUser: async function (req, res, next){
     try{
+      // cancle user และแก้ไข requestUser
       const { id } = req.params
       const obj = req.body
       const post = await Post.findById(id)
@@ -203,6 +230,13 @@ const PostController = {
         }
       }
       await Post.findByIdAndUpdate(id, {requestUser: arrReauest})
+
+      // ลบแจ้งเตือนจากเจ้าของโพสต์
+      const user = await User.findById(post.ownerId)
+      const newArrJob = user.notiJob.filter((item) => item._id != obj._id)
+      await User.findByIdAndUpdate(post.ownerId, {notiJob: newArrJob})
+
+      // ลบ user ใน notinewpost ของแต่ละ user
       const userNoti = await User.find({job: obj.job})
       userNoti.map(async (item) => {
         const newArr = item.notiNewPost
@@ -226,6 +260,7 @@ const PostController = {
   },
   applyUser : async function (req, res, next){
     try{
+      //ปรับเปลี่ยน status ให้เป็น true ใน post
       const { id } = req.params
       const obj = req.body
       const post = await Post.findById(id)
@@ -237,6 +272,10 @@ const PostController = {
         }
       }
       await Post.findByIdAndUpdate(id, {requestUser: arrRequest})
+
+
+
+      //ปรับ status ให้เป็น true ใน notipost ทุก user
       const newPost = await Post.findById(id)
       const userNoti = await User.find({job: obj.job})
       userNoti.map(async (item) => {
@@ -252,26 +291,38 @@ const PostController = {
             break;
           }
         }
-        const newArrJob = item.notiJob
-        newArrJob.push({
-          _id: newPost._id,
-          title: newPost.title,
-          description: newPost.description,
-          type: newPost.type,
-          ownerId: newPost.ownerId,
-          first_name: newPost.first_name,
-          last_name: newPost.last_name,
-          imgOwner: newPost.imgOwner,
-          status: newPost.status,
-          createDate: newPost.createDate,
-          createTime: newPost.createTime,
-          job: newPost.job,
-          img: newPost.img,
-          requestUser: [],
-          seeByUser: false,
-        })
-        await User.findByIdAndUpdate(item._id, {notiNewPost: newArr, notiJob: newArrJob})
+        await User.findByIdAndUpdate(item._id, {notiNewPost: newArr })
       })
+
+
+      //แจ้งเตือนไปยังผู้ request
+      const user = await User.findById(obj._id)
+      const newArrJob = user.notiJob
+      newArrJob.push({
+        title: newPost.title,
+        description: newPost.description,
+        type: newPost.type,
+        createDate: newPost.createDate,
+        createTime: newPost.createTime,
+        job: newPost.job,
+        img: user.img,
+        seeByUser: false,
+        requestPost: false,
+        first_name: user.first_name,
+        last_name: user.last_name
+      })
+      await User.findByIdAndUpdate(obj._id, {notiJob: newArrJob})
+
+      //ปรับเป็น true ฝั่งเจ้าของโพสต์
+      const userOwner = await User.findById(newPost.ownerId)
+      const arr = userOwner.notiJob
+      for(var i = 0 ; i < arr.length ; i ++){
+        if(arr[i]._id == obj._id){
+          arr[i].status = true
+          break;
+        }
+      }
+      await User.findByIdAndUpdate(newPost.ownerId, {notiJob : arr})
       res.status(201).send("Apply user complete")
     } catch (err){
       console.log(err)
