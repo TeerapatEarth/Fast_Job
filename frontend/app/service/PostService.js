@@ -14,6 +14,7 @@ class PostService {
     }
     static async deletePost(id){
         return await axios.delete(API.Post.deletePost+id)
+    }
     static async searchPost(word){
         return await axios.get(API.Post.searchPost+word)
     }
