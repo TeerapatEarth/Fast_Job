@@ -27,12 +27,16 @@ export default class Navbar extends Component {
     try {
       const result = await AuthService.session();
       const arrNoti = result.data.notiNewPost;
+      const arrJob = result.data.notiJob
       const noSee = arrNoti.filter((item) => item.seeByUser == false);
+      const noseeJob = arrJob.filter((item) => item.seeByUser == false);
       const count = noSee.length;
-      if (count == 0) {
-        this.setState({ countNoti: count });
+      const countJob = noseeJob.length
+      const countAll = count + countJob
+      if (countAll == 0) {
+        this.setState({ countNoti: countAll });
       } else {
-        this.setState({ countNoti: count, checkNoti: true });
+        this.setState({ countNoti: countAll, checkNoti: true });
       }
       if(result.data.role === "Admin"){
         this.setState({admin: true})

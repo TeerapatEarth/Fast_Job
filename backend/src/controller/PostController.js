@@ -100,8 +100,6 @@ const PostController = {
       await Post.findByIdAndUpdate(id, {
         title: obj.title,
         description: obj.description,
-        type: obj.type,
-        job: obj.job,
         img: img,
       });
       const userNoti = await User.find({ job });
@@ -180,21 +178,27 @@ const PostController = {
       const user = await User.findById(post.ownerId)
       const newArrJob = user.notiJob
       newArrJob.push({
-        _id: obj._id,
-        user_name: obj.user_name,
-        first_name: obj.first_name,
-        last_name: obj.last_name,
-        email: obj.email,
-        job: obj.job,
-        img: obj.img,
-        status: false,
-        seeByUser: false,
-        type: post.type,
-        imgPost: post.img,
+        _id: post._id,
         title: post.title,
         description: post.description,
+        type: post.type,
+        ownerId: post.ownerId,
+        first_name: post.first_name,
+        last_name: post.last_name,
+        imgOwner: post.imgOwner,
+        job: post.job,
         createDate: post.createDate,
         createTime: post.createTime,
+        img: post.img,
+        userRequestId: obj._id,
+        user_nameRequest: obj.user_name,
+        first_nameRequest: obj.first_name,
+        last_nameRequest: obj.last_name,
+        emailRequest: obj.email,
+        jobRequest: obj.job,
+        imgRequest: obj.img,
+        status: false,
+        seeByUser: false,
         requestPost: true
       })
       await User.findByIdAndUpdate(post.ownerId, {notiJob: newArrJob})
@@ -233,7 +237,13 @@ const PostController = {
 
       // ลบแจ้งเตือนจากเจ้าของโพสต์
       const user = await User.findById(post.ownerId)
-      const newArrJob = user.notiJob.filter((item) => item._id != obj._id)
+      const newArrJob = user.notiJob
+      for(var i = 0; i < newArrJob.length ; i++){
+        if(newArrJob[i]._id == id && newArrJob[i].userRequestId == obj._id){
+          newArrJob.splice(i, 1)
+          break;
+        }
+      }
       await User.findByIdAndUpdate(post.ownerId, {notiJob: newArrJob})
 
       // ลบ user ใน notinewpost ของแต่ละ user
@@ -297,28 +307,37 @@ const PostController = {
 
       //แจ้งเตือนไปยังผู้ request
       const user = await User.findById(obj._id)
+      const userOwner = await User.findById(newPost.ownerId)
       const newArrJob = user.notiJob
       newArrJob.push({
-        title: newPost.title,
+        _id: newPost._id,
         description: newPost.description,
-        type: newPost.type,
+        first_name: newPost.first_name,
+        last_name: newPost.last_name,
+        imgOwner: newPost.imgOwner,
+        job: newPost.job,
         createDate: newPost.createDate,
         createTime: newPost.createTime,
-        job: newPost.job,
-        img: user.img,
+        requestUser: newPost.requestUser,
+        userRequestId: newPost.ownerId,
+        imgRequest: newPost.imgOwner,
+        title: newPost.title,
+        first_nameRequest: newPost.first_name,
+        last_nameRequest: newPost.last_name,
+        jobRequest: userOwner.job,
+        type: newPost.type,
+        img: newPost.img,
+        status: true,
         seeByUser: false,
-        requestPost: false,
-        first_name: user.first_name,
-        last_name: user.last_name
+        requestPost: false
       })
       await User.findByIdAndUpdate(obj._id, {notiJob: newArrJob})
 
       //ปรับเป็น true ฝั่งเจ้าของโพสต์
-      const userOwner = await User.findById(newPost.ownerId)
       const arr = userOwner.notiJob
       for(var i = 0 ; i < arr.length ; i ++){
-        if(arr[i]._id == obj._id){
-          arr[i].status = true
+        if(arr[i]._id == id && arr[i].userRequestId == obj._id){
+          arr.splice(i, 1)
           break;
         }
       }

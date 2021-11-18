@@ -204,13 +204,15 @@ const UserController = {
       const { id } = req.params;
       const user = await User.findById(id)
       const arrNoti = user.notiNewPost
+      const arrJob = user.notiJob
       arrNoti.map((item) => item.seeByUser = true)
-      await User.findByIdAndUpdate(id, {notiNewPost: arrNoti})
+      arrJob.map((item) => item.seeByUser = true)
+      await User.findByIdAndUpdate(id, {notiNewPost: arrNoti, notiJob: arrJob})
       res.status(201).send("User see notify")
     } catch (err){
       console.log(err)
     }
-  }
+  },
 };
 
 module.exports = UserController;
