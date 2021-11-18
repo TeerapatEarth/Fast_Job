@@ -7,29 +7,17 @@ import {
   HStack,
   VStack,
   Image,
-  Button,
 } from "native-base";
-import AuthService from "../../service/AuthService";
 import DescModal from "../Modal/DescModal";
 import { TouchableRipple } from "react-native-paper";
 export default class Newpost extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      sessionUser: "",
       modalDetail: false,
       modalSwitch: false,
     };
-    this.getSession();
   }
-  getSession = async () => {
-    try {
-      const result = await AuthService.session();
-      this.setState({ sessionUser: result.data });
-    } catch (err) {
-      console.log(err);
-    }
-  };
   setHide = (bool, item) => {
     this.setState({ modalDetail: bool, modalSwitch: bool, dataItem: item });
   };
@@ -38,11 +26,11 @@ export default class Newpost extends Component {
       <NativeBaseProvider>
         <FlatList
           style={{ borderBottomColor: "red" }}
-          data={this.state.sessionUser.notiNewPost}
+          data={this.props.notipost}
           renderItem={({ item }) => (
             <TouchableRipple onPress={() => this.setHide(true, item)}>
               <Box
-                height={120}
+                height={100}
                 mb={1}
                 _dark={{
                   borderColor: "gray.600",
@@ -69,7 +57,7 @@ export default class Newpost extends Component {
                       style={{ borderRadius: 40, marginTop: 10 }}
                     />
                   </TouchableRipple>
-                  <VStack style={{ width: 200 }}>
+                  <VStack style={{ width: 200, marginTop: 15 }}>
                     <Text
                       _dark={{
                         color: "warmGray.50",
@@ -78,7 +66,7 @@ export default class Newpost extends Component {
                       bold
                       numberOfLines={1}
                     >
-                      {item.first_name} {item.last_name}
+                      {item.title}
                     </Text>
 
                     <Text
@@ -86,18 +74,9 @@ export default class Newpost extends Component {
                       _dark={{
                         color: "warmGray.200",
                       }}
+                      numberOfLines={1}
                     >
-                      {item.job}
-                    </Text>
-                    <Text
-                      color="coolGray.600"
-                      _dark={{
-                        color: "warmGray.200",
-                      }}
-                      numberOfLines={2}
-                      mt={1}
-                    >
-                      {item.title}
+                      By : {item.first_name} {item.last_name}
                     </Text>
                     <Text
                       color="coolGray.600"

@@ -24,11 +24,6 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use((req, res, next) => {
-  console.log(req.path)
-  next()
-})
-
 const UserRouter = require("./src/router/UserRouter");
 app.use(UserRouter);
 

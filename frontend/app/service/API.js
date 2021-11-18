@@ -19,9 +19,13 @@ const API = {
     Post: {
         create: `${BASE_URL}/post/create`,
         getAllPost: `${BASE_URL}/post`,
+        getOnePost: `${BASE_URL}/post/`,
         editPost: `${BASE_URL}/post/update/`,
         deletePost: `${BASE_URL}/post/delete/`,
-        searchPost: `${BASE_URL}/post/search/`
+        searchPost: `${BASE_URL}/post/search/`,
+        addUser: `${BASE_URL}/post/adduser/`,
+        cancleUser: `${BASE_URL}/post/cancleuser/`,
+        applyUser: `${BASE_URL}/post/apply/`,
     },
     Job: {
         getJob: `${BASE_URL}/job`,
