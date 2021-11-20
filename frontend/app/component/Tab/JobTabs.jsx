@@ -121,18 +121,6 @@ class JobTabs extends React.Component {
               )}
             </Tabs.View>
             <Tabs.View>
-              <Provider>
-                <View
-                  style={{
-                    margin: 15,
-                    padding: 15,
-                    borderRadius: 10,
-                    backgroundColor: "rgba(51,201,255, 0.2)",
-                  }}
-                >
-                
-                </View>
-              </Provider>
               {this.state.checkData && (
                 <View>
                   <Text> </Text>
@@ -141,6 +129,7 @@ class JobTabs extends React.Component {
                     data={this.state.allData}
                     type="hire"
                   />
+                  
                 </View>
               )}
             </Tabs.View>

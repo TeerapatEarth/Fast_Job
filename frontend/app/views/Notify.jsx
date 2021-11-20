@@ -7,7 +7,7 @@ export default class Login extends Component {
   render() {
     return (
       <Stack.Navigator
-        screenOptions={{ headerStyle: { backgroundColor: "#26c5de" } }}
+        screenOptions={{ headerStyle: { backgroundColor: "rgb(20,78,99)" } }}
       >
         <Stack.Screen name={"Notify"} component={NotiPage}></Stack.Screen>
       </Stack.Navigator>

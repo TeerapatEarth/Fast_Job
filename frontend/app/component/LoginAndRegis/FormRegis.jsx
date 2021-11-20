@@ -14,9 +14,10 @@ import {
 import React, { Component } from "react";
 import { StyleSheet, Image } from "react-native";
 import UserService from "../../service/UserService";
-import { Alert } from "react-native";
+import { Alert, ImageBackground } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import JobService from "../../service/JobService";
+import { TextInput } from "react-native-paper";
 export default class FormRegis extends Component {
   constructor(props) {
     super(props);
@@ -143,18 +144,14 @@ export default class FormRegis extends Component {
   render() {
     return (
       <NativeBaseProvider>
-        <ScrollView
-          width="100%"
-          _contentContainerStyle={{
-            bg: "primary.900",
-          }}
-        >
+        <ImageBackground style={{flex: 1}} source={require("../../assets/Back.png")}>
+        <ScrollView width="100%">
           <Center flex={1}>
             <Heading textAlign="center" mb="3" mt="10" style={styles.font}>
               Fast Jobs
             </Heading>
-            <Stack space={5} width="80%">
-              <Text fontSize="xl" textAlign="center" style={styles.font}>
+            <Stack space={5} width="80%" style={{backgroundColor: "rgba(20,78,99,0.3)", padding: 10, borderRadius: 10,  margin: 5}}>
+              <Text fontSize="xl" textAlign="center" style={{color: "white", fontSize: 25}}>
                 Sign up
               </Text>
               {this.state.img && (
@@ -172,64 +169,76 @@ export default class FormRegis extends Component {
                 <FormControl.Label _text={{ color: "white" }}>
                   Username
                 </FormControl.Label>
-                <Input
+                <TextInput
                   placeholder="Username"
                   style={styles.bgInput}
                   onChangeText={(text) => this.setState({ user_name: text })}
+                  mode="outlined"
+                  theme={{ colors: { placeholder: 'gray', text: 'black', primary: 'white',underlineColor:'transparent',background : '#003489'}}}
                 />
               </FormControl>
               <FormControl isRequired>
                 <FormControl.Label _text={{ color: "white" }}>
                   Password
                 </FormControl.Label>
-                <Input
+                <TextInput
                   placeholder="Password"
-                  type="password"
+                  secureTextEntry={true}
                   style={styles.bgInput}
                   onChangeText={(text) => this.setState({ password: text })}
+                  mode="outlined"
+                  theme={{ colors: { placeholder: 'gray', text: 'black', primary: 'white',underlineColor:'transparent',background : '#003489'}}}
                 />
               </FormControl>
               <FormControl isRequired>
                 <FormControl.Label _text={{ color: "white" }}>
                   Confirm Password
                 </FormControl.Label>
-                <Input
+                <TextInput
                   placeholder="Confirm Password"
-                  type="password"
+                  secureTextEntry={true}
                   style={styles.bgInput}
                   onChangeText={(text) =>
                     this.setState({ confirmPassword: text })
                   }
+                  mode="outlined"
+                  theme={{ colors: { placeholder: 'gray', text: 'black', primary: 'white',underlineColor:'transparent',background : '#003489'}}}
                 />
               </FormControl>
               <FormControl isRequired>
                 <FormControl.Label _text={{ color: "white" }}>
                   Email
                 </FormControl.Label>
-                <Input
+                <TextInput
                   placeholder="Email"
                   style={styles.bgInput}
                   onChangeText={(text) => this.setState({ email: text })}
+                  mode="outlined"
+                  theme={{ colors: { placeholder: 'gray', text: 'black', primary: 'white',underlineColor:'transparent',background : '#003489'}}}
                 />
               </FormControl>
               <FormControl isRequired>
                 <FormControl.Label _text={{ color: "white" }}>
                   First name
                 </FormControl.Label>
-                <Input
+                <TextInput
                   placeholder="First name"
                   style={styles.bgInput}
                   onChangeText={(text) => this.setState({ first_name: text })}
+                  mode="outlined"
+                  theme={{ colors: { placeholder: 'gray', text: 'black', primary: 'white',underlineColor:'transparent',background : '#003489'}}}
                 />
               </FormControl>
               <FormControl isRequired>
                 <FormControl.Label _text={{ color: "white" }}>
                   Last name
                 </FormControl.Label>
-                <Input
+                <TextInput
                   placeholder="Last name"
                   style={styles.bgInput}
                   onChangeText={(text) => this.setState({ last_name: text })}
+                  mode="outlined"
+                  theme={{ colors: { placeholder: 'gray', text: 'black', primary: 'white',underlineColor:'transparent',background : '#003489'}}}
                 />
               </FormControl>
               <FormControl isRequired>
@@ -324,13 +333,15 @@ export default class FormRegis extends Component {
             </Stack>
           </Center>
         </ScrollView>
+        </ImageBackground>
       </NativeBaseProvider>
     );
   }
 }
 const styles = StyleSheet.create({
   font: {
-    color: "white",
+    color: "rgb(20,78,99)",
+    fontSize: 50
   },
   bgInput: {
     backgroundColor: "white",

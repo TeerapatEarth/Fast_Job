@@ -8,9 +8,11 @@ import {
   Heading,
   FormControl,
   ScrollView,
+  Image
 } from "native-base";
 import React, { Component } from "react";
-import { StyleSheet, Alert } from "react-native";
+import { StyleSheet, Alert, ImageBackground, View} from "react-native";
+import { TextInput } from "react-native-paper";
 import AuthService from "../../service/AuthService";
 class FormLogin extends Component {
   constructor(props) {
@@ -36,43 +38,53 @@ class FormLogin extends Component {
   };
   render() {
     return (
+      
       <NativeBaseProvider>
+        <ImageBackground style={{flex: 1}} source={require("../../assets/Back.png")}>
         <ScrollView
           width="100%"
           _contentContainerStyle={{
-            bg: "primary.900",
             height: "100%",
           }}
         >
           <Center flex={1}>
-            <Heading textAlign="center" mb="3" style={styles.font}>
-              Fast Jobs
-            </Heading>
+            <View style={{paddingLeft: 15}}>
+            <Image
+              source={require("../../assets/Logo3.png")}
+              resizeMode="contain"
+              alt="Header"
+              style={{padding: 10}}
+            />
+            </View>
             <Stack space={5} width="80%">
-              <Text fontSize="xl" textAlign="center" style={styles.font}>
+              <Heading size="2xl" textAlign="center" style={styles.font}>
                 Login
-              </Text>
+              </Heading>
               <FormControl>
                 <FormControl.Label _text={{ color: "white" }}>
                   Username
                 </FormControl.Label>
-                <Input
+                <TextInput
                   placeholder="Username"
                   style={styles.bgInput}
                   onChangeText={(text) => this.setState({ user_name: text })}
                   value={this.state.user_name}
+                  mode="outlined"
+                  theme={{ colors: { placeholder: 'gray', text: 'black', primary: 'white',underlineColor:'transparent',background : '#003489'}}}
                 />
               </FormControl>
               <FormControl>
                 <FormControl.Label _text={{ color: "white" }}>
                   Password
                 </FormControl.Label>
-                <Input
+                <TextInput
                   placeholder="Password"
-                  type="password"
+                  secureTextEntry={true}
                   style={styles.bgInput}
                   onChangeText={(text) => this.setState({ password: text })}
                   value={this.state.password}
+                  mode="outlined"
+                  theme={{ colors: { placeholder: 'gray', text: 'black', primary: 'white',underlineColor:'transparent',background : '#003489'}}}
                 />
               </FormControl>
               <Button width="100%" mt="3" onPress={() => this.login()}>
@@ -84,14 +96,16 @@ class FormLogin extends Component {
             </Stack>
           </Center>
         </ScrollView>
+        </ImageBackground>
       </NativeBaseProvider>
+      
     );
   }
 }
 
 const styles = StyleSheet.create({
   font: {
-    color: "white",
+    color: "rgb(20,78,99)",
   },
   bgInput: {
     backgroundColor: "white",

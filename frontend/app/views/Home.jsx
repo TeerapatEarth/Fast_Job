@@ -12,7 +12,7 @@ import PostService from "../service/PostService";
 
 const styles = StyleSheet.create({
   Header: {
-    backgroundColor: "rgb(20,78,99)",
+    backgroundColor: "rgb(50,191,241)",
   },
   TextHearder: {
     color: "white",
@@ -96,9 +96,9 @@ class Homepage extends React.Component {
           updateSec={this.updateSession}
         ></Navbar>
         <ScrollView>
-          <Box p={5} mb={3} style={styles.Header}>
+          <Box p={2} mb={3} style={styles.Header}>
             <Image
-              source={require("../assets/logover2.png")}
+              source={require("../assets/Logo3.png")}
               resizeMode="contain"
               alt="Header"
             />

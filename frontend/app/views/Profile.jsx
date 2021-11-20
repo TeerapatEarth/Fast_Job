@@ -19,7 +19,7 @@ import UserService from "../service/UserService";
 const bcrypt = require("bcryptjs");
 const styles = StyleSheet.create({
   bottom: {
-    backgroundColor: "#26c5de",
+    backgroundColor: "rgb(20,78,99)",
     height: 80,
   },
   arrow: {

@@ -200,7 +200,7 @@ class JobCarousel extends React.Component {
   render() {
     return (
       <View>
-        <View style={{margin: 5, padding: 15, backgroundColor: "rgb(20,78,99)", borderRadius: 5, marginBottom: 20}}>
+        <View style={{margin: 5, padding: 15, backgroundColor: "rgb(76, 183, 217)", borderRadius: 5, marginBottom: 20}}>
         <Picker
           selectedValue={this.state.selectedWorker}
           onValueChange={(itemValue, itemIndex) => this.changeValue(itemValue)}
@@ -228,7 +228,7 @@ class JobCarousel extends React.Component {
                 return (
                   <View style={styles.slide}>
                     <View style={styles.slideInnerContainer}>
-                      <Card>
+                      <Card style={{backgroundColor: "rgb(214, 245, 255)"}}>
                         <Card.Cover
                           source={{ uri: item.img }}
                           resizeMode="cover"
