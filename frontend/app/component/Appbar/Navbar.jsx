@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   bottom: {
     marginTop: 20,
     justifyContent: "flex-end",
-    backgroundColor: "#26c5de",
+    backgroundColor: "rgb(20,78,99)",
   },
 });
 export default class Navbar extends Component {

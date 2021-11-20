@@ -6,7 +6,7 @@ const Stack = createNativeStackNavigator();
 export default class Admin extends Component {
     render() {
         return (
-            <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: "#26c5de" } }}>
+            <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: "rgb(20,78,99)" } }}>
                 <Stack.Screen name={"Admin"} component={AdminPage}></Stack.Screen>
             </Stack.Navigator>
         )
