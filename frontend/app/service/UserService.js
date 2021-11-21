@@ -30,6 +30,12 @@ class UserService {
     static async unBan(id){
         return await axios.put(API.User.unBan+id)
     }
+    static async deleteNotiPost(payload, id){
+        return await axios.put(API.User.deletePostNoti+id, payload)
+    }
+    static async deleteNotiJob(payload, id){
+        return await axios.put(API.User.deleteJobNoti+id, payload)
+    }
 }
 
 export default UserService

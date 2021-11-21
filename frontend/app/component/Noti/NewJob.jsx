@@ -12,6 +12,8 @@ import {
 import DescModal from "../Modal/DescModal";
 import { TouchableRipple } from "react-native-paper";
 import PostService from "../../service/PostService";
+import { Alert } from "react-native";
+import UserService from "../../service/UserService";
 export default class NewJob extends Component {
   constructor(props) {
     super(props);
@@ -21,6 +23,23 @@ export default class NewJob extends Component {
       arr: props.notijob,
     };
   }
+  confirmDeleteNoti = (item, index) => {
+    Alert.alert("Delete", "ต้องการลบแจ้งเตือนหรือไม่", [
+      {
+        text: "Delete",
+        onPress: () => this.deleteNoti(item, index),
+      },
+      { text: "Cancle" },
+    ]);
+  };
+  deleteNoti = async (item, index) => {
+    try {
+      this.props.deleteUser(index);
+      await UserService.deleteNotiJob(item, this.props.id);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   setHide = (bool, item) => {
     this.setState({ modalDetail: bool, modalSwitch: bool, dataItem: item });
   };
@@ -50,7 +69,10 @@ export default class NewJob extends Component {
           data={this.props.notijob}
           renderItem={({ item, index }) => (
             <Box>
-              <TouchableRipple onPress={() => this.setHide(true, item)}>
+              <TouchableRipple
+                onPress={() => this.setHide(true, item)}
+                onLongPress={() => this.confirmDeleteNoti(item, index)}
+              >
                 <Box
                   height={120}
                   mb={1}
@@ -100,16 +122,18 @@ export default class NewJob extends Component {
                       >
                         By : {item.first_nameRequest} {item.last_nameRequest}
                       </Text>
-                      <Text
-                        color="coolGray.600"
-                        _dark={{
-                          color: "warmGray.200",
-                        }}
-                        numberOfLines={2}
-                        mt={1}
-                      >
-                        Job : {item.jobRequest}
-                      </Text>
+                      {item.requestPost == true && (
+                        <Text
+                          color="coolGray.600"
+                          _dark={{
+                            color: "warmGray.200",
+                          }}
+                          numberOfLines={2}
+                          mt={1}
+                        >
+                          Job : {item.jobRequest}
+                        </Text>
+                      )}
                       {item.type == "findJob" && item.requestPost == false && (
                         <Text
                           color="coolGray.600"

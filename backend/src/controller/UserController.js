@@ -213,6 +213,44 @@ const UserController = {
       console.log(err)
     }
   },
+  deleteNotiPost: async function (req, res, next){
+    try{
+      const { id } = req.params
+      const obj = req.body
+      const user = await User.findById(id)
+      const newArr = user.notiNewPost
+      for(var i = 0 ; i < newArr.length ; i++){
+        if(newArr[i]._id == obj._id){
+          newArr.splice(i, 1)
+          break;
+        }
+      }
+      req.session.user.notiNewPost = newArr
+      await User.findByIdAndUpdate(id, {notiNewPost: newArr})
+      res.status(201).send("Delete notify post")
+    } catch (err){
+      console.log(err)
+    }
+  },
+  deleteNotiJob: async function (req, res, next){
+    try{
+      const { id } = req.params
+      const obj = req.body
+      const user = await User.findById(id)
+      const newArr = user.notiJob
+      for(var i = 0 ; i < newArr.length ; i++){
+        if(newArr[i]._id == obj._id){
+          newArr.splice(i, 1)
+          break;
+        }
+      }
+      req.session.user.notiJob = newArr
+      await User.findByIdAndUpdate(id, {notiJob: newArr})
+      res.status(201).send("Delete notify job")
+    } catch (err){
+      console.log(err)
+    }
+  }
 };
 
 module.exports = UserController;

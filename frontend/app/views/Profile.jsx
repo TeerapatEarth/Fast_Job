@@ -16,6 +16,7 @@ import React, { Component } from "react";
 import { StyleSheet, Text, Image, Alert } from "react-native";
 import { Appbar } from "react-native-paper";
 import UserService from "../service/UserService";
+import JobService from "../service/JobService";
 const bcrypt = require("bcryptjs");
 const styles = StyleSheet.create({
   bottom: {
@@ -41,8 +42,18 @@ class Profile extends React.Component {
       hideInputPassword: true,
       showModal: false,
       confirmPassword: "",
+      allJob: [],
     };
+    this.getAllJob();
   }
+  getAllJob = async () => {
+    try {
+      const result = await JobService.getJob();
+      this.setState({ allJob: result.data });
+    } catch (err) {
+      console.log(err);
+    }
+  };
   pickImage = async () => {
     if (Platform.OS !== "web") {
       const {
@@ -91,54 +102,51 @@ class Profile extends React.Component {
       { text: "Delete", onPress: () => this.deleteAccount() },
       { text: "Cancle" },
     ]);
-  }
+  };
   deleteAccount = async () => {
-    try{
-      await UserService.deleteUser(this.props.route.params.session._id)
+    try {
+      await UserService.deleteUser(this.props.route.params.session._id);
       Alert.alert("Complete", "ลบบัญชีสำเร็จ", [
         {
           text: "Ok",
-          onPress: () => this.logout()
-        }
-      ])
-    } catch (err){
-      console.log(err)
+          onPress: () => this.logout(),
+        },
+      ]);
+    } catch (err) {
+      console.log(err);
     }
-  }
+  };
   updateProfile = async () => {
     try {
-      const newSession = this.props.route.params.session
-      newSession.user_name = this.state.user_name
-      newSession.email = this.state.email
-      newSession.first_name = this.state.first_name
-      newSession.last_name = this.state.last_name
-      newSession.job = this.state.job
-      newSession.img = this.state.img
-      this.props.route.params.update(newSession)
-      const fd = new FormData()
-      fd.append("user_name", this.state.user_name)
-      fd.append("password", this.state.newPassword)
-      fd.append("email", this.state.email)
-      fd.append("first_name", this.state.first_name)
-      fd.append("last_name", this.state.last_name)
-      fd.append("job", this.state.job)
+      this.props.route.params.session.user_name = this.state.user_name;
+      this.props.route.params.session.email = this.state.email;
+      this.props.route.params.session.first_name = this.state.first_name;
+      this.props.route.params.session.last_name = this.state.last_name;
+      this.props.route.params.session.job = this.state.job;
+      this.props.route.params.session.img = this.state.img;
+      const fd = new FormData();
+      fd.append("user_name", this.state.user_name);
+      fd.append("password", this.state.newPassword);
+      fd.append("email", this.state.email);
+      fd.append("first_name", this.state.first_name);
+      fd.append("last_name", this.state.last_name);
+      fd.append("job", this.state.job);
       let localUri = this.state.img;
       let filename = localUri.split("/").pop();
       let match = /\.(\w+)$/.exec(filename);
       let type = match ? `image/${match[1]}` : `image`;
       fd.append("myImage", { uri: localUri, name: filename, type });
-      await UserService.updateUser(this.props.route.params.session._id, fd)
+      await UserService.updateUser(this.props.route.params.session._id, fd);
       Alert.alert("Complete", "Update สำเร็จ", [
         {
           text: "Ok",
-          onPress: () => this.props.navigation.goBack()
-        }
-      ])
-
-    } catch (err){
-      console.log(err)
+          onPress: () => this.props.navigation.goBack(),
+        },
+      ]);
+    } catch (err) {
+      console.log(err);
     }
-  }
+  };
   logout = async () => {
     try {
       await AuthService.logout();
@@ -197,7 +205,9 @@ class Profile extends React.Component {
                     placeholder="New Password"
                     type="password"
                     style={{ borderColor: "black" }}
-                    onChangeText={(text) => this.setState({ newPassword: text })}
+                    onChangeText={(text) =>
+                      this.setState({ newPassword: text })
+                    }
                     isDisabled={this.state.hideInputPassword}
                   />
                 )}
@@ -244,29 +254,24 @@ class Profile extends React.Component {
                   value={this.state.last_name}
                 />
               </FormControl>
-              <FormControl style={{ marginBottom: 20 }}>
-                <FormControl.Label _text={{ color: "black" }}>
-                  Job
-                </FormControl.Label>
-                <Select
-                  placeholder="Job"
-                  onValueChange={(value) => this.setState({ job: value })}
-                  value={this.state.job}
-                >
-                  <Select.Item
-                    label="Front-end Developer"
-                    value="Front-end Developer"
-                  ></Select.Item>
-                  <Select.Item
-                    label="Back-end Developer"
-                    value="Back-end Developer"
-                  ></Select.Item>
-                  <Select.Item
-                    label="Full Stack Developer"
-                    value="Full Stack Developer"
-                  ></Select.Item>
-                </Select>
-              </FormControl>
+                <FormControl style={{ marginBottom: 20 }}>
+                  <FormControl.Label _text={{ color: "black" }}>
+                    Job
+                  </FormControl.Label>
+                  <Select
+                    placeholder="Job"
+                    onValueChange={(value) => this.setState({ job: value })}
+                    value={this.state.job}
+                  >
+                    {this.state.allJob.map((item) => (
+                      <Select.Item
+                        key={item._id}
+                        label={item.job}
+                        value={item.job}
+                      ></Select.Item>
+                    ))}
+                  </Select>
+                </FormControl>
               <Button
                 width="100%"
                 style={{ marginTop: 5 }}

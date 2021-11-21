@@ -5,29 +5,40 @@ import NewJob from "./NewJob";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import AuthService from "../../service/AuthService";
+import { TouchableHighlightBase } from "react-native";
 const Tab = createBottomTabNavigator();
 export default class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      sessionUser: {},
-      arrNotiJob: []
+      arrNotiJob: [],
+      arrNotiPost: [],
+      id: ""
     };
     this.getSession();
   }
   getSession = async () => {
     try {
       const result = await AuthService.session();
-      this.setState({ sessionUser: result.data, arrNotiJob: result.data.notiJob });
+      this.setState({
+        arrNotiJob: result.data.notiJob,
+        arrNotiPost: result.data.notiNewPost,
+        id: result.data._id
+      });
     } catch (err) {
       console.log(err);
     }
   };
   deleteUserNoti = (index) => {
-    const newArr = this.state.arrNotiJob
+    const newArr = this.state.arrNotiJob;
+    newArr.splice(index, 1);
+    this.setState({ arrNotiJob: newArr });
+  };
+  deletePostNoti = (index) => {
+    const newArr = this.state.arrNotiPost;
     newArr.splice(index, 1)
-    this.setState({arrNotiJob: newArr})
-  }
+    this.setState({ arrNotiPost: newArr})
+  };
   render() {
     return (
       <Tab.Navigator screenOptions={{ headerShown: false }}>
@@ -35,8 +46,10 @@ export default class Login extends Component {
           name={"New Post"}
           children={() => (
             <NewPost
-              notipost={this.state.sessionUser.notiNewPost}
+              notipost={this.state.arrNotiPost}
               navigation={this.props.navigation}
+              deletePost={this.deletePostNoti}
+              id={this.state.id}
             />
           )}
           options={{
@@ -58,6 +71,7 @@ export default class Login extends Component {
               notijob={this.state.arrNotiJob}
               navigation={this.props.navigation}
               deleteUser={this.deleteUserNoti}
+              id={this.state.id}
             />
           )}
           options={{

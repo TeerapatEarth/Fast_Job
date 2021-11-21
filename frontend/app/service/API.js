@@ -1,4 +1,4 @@
-const BASE_URL = 'http://192.168.1.3:5001'
+const BASE_URL = 'http://192.168.1.7:5001'
 const API = {
     Auth: {
         login: `${BASE_URL}/login`,
@@ -14,7 +14,9 @@ const API = {
         seeNotify: `${BASE_URL}/seenotifypost/`,
         getAllUser: `${BASE_URL}/user`,
         ban: `${BASE_URL}/ban/`,
-        unBan: `${BASE_URL}/unban/`
+        unBan: `${BASE_URL}/unban/`,
+        deletePostNoti: `${BASE_URL}/deletenotifypost/`,
+        deleteJobNoti: `${BASE_URL}/deletenotifyjob/`,
     },
     Post: {
         create: `${BASE_URL}/post/create`,

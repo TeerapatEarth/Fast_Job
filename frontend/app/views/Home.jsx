@@ -8,7 +8,6 @@ import { FAB } from "react-native-paper";
 import AuthService from "../service/AuthService";
 import CreatePostModal from "../component/Modal/CreatePostModal";
 import Navbar from "../component/Appbar/Navbar";
-import PostService from "../service/PostService";
 
 const styles = StyleSheet.create({
   Header: {
@@ -43,7 +42,6 @@ class Homepage extends React.Component {
       sessionUser: "",
       activeIndex: 0,
       modalSwitch: false,
-      allData: [],
       value: 0,
     };
     this.session();
@@ -77,9 +75,6 @@ class Homepage extends React.Component {
   hide = (value) => {
     this.setState({modalSwitch: value})
   }
-  updateSession = (sec) => {
-    this.setState({sessionUser: sec})
-  }
   change = () => {
     this.child.setState({checkData: false})
     this.child.getAllPost();
@@ -88,12 +83,9 @@ class Homepage extends React.Component {
     return (
       <NativeBaseProvider>
         <Navbar
-          img={this.state.sessionUser.img}
-          user_name={this.state.sessionUser.user_name}
           logout={this.confirmLogout}
           navigation={this.props.navigation}
           session={this.state.sessionUser}
-          updateSec={this.updateSession}
         ></Navbar>
         <ScrollView>
           <Box p={2} mb={3} style={styles.Header}>
