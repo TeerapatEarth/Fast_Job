@@ -15,7 +15,7 @@ import { TouchableRipple } from "react-native-paper";
 import DescModal from "../component/Modal/DescModal";
 const styles = StyleSheet.create({
   bottom: {
-    backgroundColor: "#26c5de",
+    backgroundColor: "rgb(20,78,99)",
     height: 80,
   },
   arrow: {
@@ -101,7 +101,7 @@ export default class SearchPostPage extends Component {
                       bold
                       numberOfLines={1}
                     >
-                      {item.first_name} {item.last_name}
+                      {item.title}
                     </Text>
 
                     <Text
@@ -110,17 +110,7 @@ export default class SearchPostPage extends Component {
                         color: "warmGray.200",
                       }}
                     >
-                      {item.job}
-                    </Text>
-                    <Text
-                      color="coolGray.600"
-                      _dark={{
-                        color: "warmGray.200",
-                      }}
-                      numberOfLines={2}
-                      mt={1}
-                    >
-                      {item.title}
+                      By : {item.first_name} {item.last_name}
                     </Text>
                     <Text
                       color="coolGray.600"

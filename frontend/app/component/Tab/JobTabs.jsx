@@ -106,6 +106,7 @@ class JobTabs extends React.Component {
                   user={this.props.user}
                   data={this.state.allData}
                   type="all"
+                  navigation={this.props.navigation}
                 />
               )}
             </Tabs.View>
@@ -116,6 +117,7 @@ class JobTabs extends React.Component {
                     user={this.props.user}
                     data={this.state.allData}
                     type="findJob"
+                    navigation={this.props.navigation}
                   />
                 </View>
               )}
@@ -128,6 +130,7 @@ class JobTabs extends React.Component {
                     user={this.props.user}
                     data={this.state.allData}
                     type="hire"
+                    navigation={this.props.navigation}
                   />
                   
                 </View>

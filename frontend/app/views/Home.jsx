@@ -8,7 +8,6 @@ import { FAB } from "react-native-paper";
 import AuthService from "../service/AuthService";
 import CreatePostModal from "../component/Modal/CreatePostModal";
 import Navbar from "../component/Appbar/Navbar";
-import PostService from "../service/PostService";
 
 const styles = StyleSheet.create({
   Header: {
@@ -43,12 +42,11 @@ class Homepage extends React.Component {
       sessionUser: "",
       activeIndex: 0,
       modalSwitch: false,
-      allData: [],
       value: 0,
     };
     this.session();
   }
-  
+
   confirmLogout = () => {
     Alert.alert("Logout", "คุณต้องการออกจากระบบหรือไม่", [
       { text: "Logout", onPress: () => this.logout() },
@@ -67,33 +65,29 @@ class Homepage extends React.Component {
     try {
       const result = await AuthService.session();
       this.setState({ sessionUser: result.data });
-      if(result.data.ban){
-        Alert.alert("Error", "บัญชีของคุณถูกระงับ", [{ text: "OK", onPress: () => this.logout() }]);
+      if (result.data.ban) {
+        Alert.alert("Error", "บัญชีของคุณถูกระงับ", [
+          { text: "OK", onPress: () => this.logout() },
+        ]);
       }
     } catch (err) {
       Alert.alert("Error", "โปรดเข้าสู่ระบบ", [{ text: "OK" }]);
     }
   };
   hide = (value) => {
-    this.setState({modalSwitch: value})
-  }
-  updateSession = (sec) => {
-    this.setState({sessionUser: sec})
-  }
+    this.setState({ modalSwitch: value });
+  };
   change = () => {
-    this.child.setState({checkData: false})
+    this.child.setState({ checkData: false });
     this.child.getAllPost();
-  }
+  };
   render() {
     return (
       <NativeBaseProvider>
         <Navbar
-          img={this.state.sessionUser.img}
-          user_name={this.state.sessionUser.user_name}
           logout={this.confirmLogout}
           navigation={this.props.navigation}
           session={this.state.sessionUser}
-          updateSec={this.updateSession}
         ></Navbar>
         <ScrollView>
           <Box p={2} mb={3} style={styles.Header}>
@@ -106,22 +100,29 @@ class Homepage extends React.Component {
           <HeadCarousel />
 
           <Box mt={6}>
-            <JobTabs user={this.state.sessionUser} change={this.state.value} onRef={(ref) => this.child = ref} />
+            <JobTabs
+              user={this.state.sessionUser}
+              change={this.state.value}
+              onRef={(ref) => (this.child = ref)}
+              navigation={this.props.navigation}
+            />
           </Box>
         </ScrollView>
         <FAB
           style={styles.fab}
           large
           icon="plus"
-          onPress={() => this.setState({modalSwitch: true})}
+          onPress={() => this.setState({ modalSwitch: true })}
         />
         {this.state.modalSwitch && (
-          <CreatePostModal user={this.state.sessionUser} setHide={this.hide} reRenderPost={this.change} />
+          <CreatePostModal
+            user={this.state.sessionUser}
+            setHide={this.hide}
+            reRenderPost={this.change}
+          />
         )}
-        
       </NativeBaseProvider>
     );
   }
-  
 }
 export default Homepage;

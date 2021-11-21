@@ -10,6 +10,8 @@ import {
 } from "native-base";
 import DescModal from "../Modal/DescModal";
 import { TouchableRipple } from "react-native-paper";
+import { Alert } from "react-native";
+import UserService from "../../service/UserService"
 export default class Newpost extends Component {
   constructor(props) {
     super(props);
@@ -21,14 +23,31 @@ export default class Newpost extends Component {
   setHide = (bool, item) => {
     this.setState({ modalDetail: bool, modalSwitch: bool, dataItem: item });
   };
+  confirmDeleteNoti = (item, index) => {
+    Alert.alert("Delete", "ต้องการลบแจ้งเตือนหรือไม่", [
+      {
+        text: "Delete",
+        onPress: () => this.deleteNoti(item, index)
+      },
+      { text: "Cancle" },
+    ])
+  }
+  deleteNoti = async (item, index) => {
+    try{
+      this.props.deletePost(index)
+      await UserService.deleteNotiPost(item, this.props.id)
+    } catch (err){
+      console.log(err)
+    }
+  }
   render() {
     return (
       <NativeBaseProvider>
         <FlatList
           style={{ borderBottomColor: "red" }}
           data={this.props.notipost}
-          renderItem={({ item }) => (
-            <TouchableRipple onPress={() => this.setHide(true, item)}>
+          renderItem={({ item, index }) => (
+            <TouchableRipple onPress={() => this.setHide(true, item)} onLongPress={() => this.confirmDeleteNoti(item, index)}>
               <Box
                 height={100}
                 mb={1}

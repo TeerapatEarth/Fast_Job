@@ -64,18 +64,17 @@ export default class Navbar extends Component {
           onPress={() =>
             this.props.navigation.navigate("profile", {
               session: this.props.session,
-              update: this.props.updateSec,
             })
           }
         >
           <Image
             size="xs"
-            source={{ uri: this.props.img }}
+            source={{ uri: this.props.session.img }}
             alt="Alternate Text"
             style={{ borderRadius: 20 }}
           />
         </TouchableRipple>
-        <Appbar.Content title={this.props.user_name} color="white" />
+        <Appbar.Content title={this.props.session.user_name} color="white" />
         {this.state.admin && (
           <Appbar.Action
             icon="account"
