@@ -101,7 +101,7 @@ export default class NewJob extends Component {
                         style={{ borderRadius: 40, marginTop: 10 }}
                       />
                     </TouchableRipple>
-                    <VStack style={{ width: 200 }}>
+                    <VStack style={{ width: 200 , marginTop: 15}}>
                       <Text
                         _dark={{
                           color: "warmGray.50",

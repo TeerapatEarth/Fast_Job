@@ -16,6 +16,7 @@ import React, { Component } from "react";
 import { StyleSheet, Text, Image, Alert } from "react-native";
 import { Appbar } from "react-native-paper";
 import UserService from "../service/UserService";
+import AuthService from "../service/AuthService";
 import JobService from "../service/JobService";
 const bcrypt = require("bcryptjs");
 const styles = StyleSheet.create({
@@ -39,6 +40,7 @@ class Profile extends React.Component {
       last_name: this.props.route.params.session.last_name,
       job: this.props.route.params.session.job,
       img: this.props.route.params.session.img,
+      description: this.props.route.params.session.description,
       hideInputPassword: true,
       showModal: false,
       confirmPassword: "",
@@ -124,12 +126,14 @@ class Profile extends React.Component {
       this.props.route.params.session.last_name = this.state.last_name;
       this.props.route.params.session.job = this.state.job;
       this.props.route.params.session.img = this.state.img;
+      this.props.route.params.session.description = this.state.description;
       const fd = new FormData();
       fd.append("user_name", this.state.user_name);
       fd.append("password", this.state.newPassword);
       fd.append("email", this.state.email);
       fd.append("first_name", this.state.first_name);
       fd.append("last_name", this.state.last_name);
+      fd.append("description", this.state.description);
       fd.append("job", this.state.job);
       let localUri = this.state.img;
       let filename = localUri.split("/").pop();
@@ -226,7 +230,7 @@ class Profile extends React.Component {
                   Email
                 </FormControl.Label>
                 <Input
-                  placeholder="Username"
+                  placeholder="Email"
                   style={{ borderColor: "black" }}
                   onChangeText={(text) => this.setState({ email: text })}
                   value={this.state.email}
@@ -237,7 +241,7 @@ class Profile extends React.Component {
                   First name
                 </FormControl.Label>
                 <Input
-                  placeholder="Username"
+                  placeholder="First name"
                   style={{ borderColor: "black" }}
                   onChangeText={(text) => this.setState({ first_name: text })}
                   value={this.state.first_name}
@@ -248,30 +252,43 @@ class Profile extends React.Component {
                   Last name
                 </FormControl.Label>
                 <Input
-                  placeholder="Username"
+                  placeholder="Last name"
                   style={{ borderColor: "black" }}
                   onChangeText={(text) => this.setState({ last_name: text })}
                   value={this.state.last_name}
                 />
               </FormControl>
-                <FormControl style={{ marginBottom: 20 }}>
-                  <FormControl.Label _text={{ color: "black" }}>
-                    Job
-                  </FormControl.Label>
-                  <Select
-                    placeholder="Job"
-                    onValueChange={(value) => this.setState({ job: value })}
-                    value={this.state.job}
-                  >
-                    {this.state.allJob.map((item) => (
-                      <Select.Item
-                        key={item._id}
-                        label={item.job}
-                        value={item.job}
-                      ></Select.Item>
-                    ))}
-                  </Select>
-                </FormControl>
+              <FormControl>
+                <FormControl.Label _text={{ color: "black" }}>
+                  Description
+                </FormControl.Label>
+                <Input
+                  placeholder="Description"
+                  style={{ borderColor: "black" }}
+                  onChangeText={(text) => this.setState({ description: text })}
+                  value={this.state.description}
+                  numberOfLines={5}
+                  multiline={true}
+                />
+              </FormControl>
+              <FormControl style={{ marginBottom: 20 }}>
+                <FormControl.Label _text={{ color: "black" }}>
+                  Job
+                </FormControl.Label>
+                <Select
+                  placeholder="Job"
+                  onValueChange={(value) => this.setState({ job: value })}
+                  value={this.state.job}
+                >
+                  {this.state.allJob.map((item) => (
+                    <Select.Item
+                      key={item._id}
+                      label={item.job}
+                      value={item.job}
+                    ></Select.Item>
+                  ))}
+                </Select>
+              </FormControl>
               <Button
                 width="100%"
                 style={{ marginTop: 5 }}

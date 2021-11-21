@@ -46,7 +46,7 @@ class Homepage extends React.Component {
     };
     this.session();
   }
-  
+
   confirmLogout = () => {
     Alert.alert("Logout", "คุณต้องการออกจากระบบหรือไม่", [
       { text: "Logout", onPress: () => this.logout() },
@@ -65,20 +65,22 @@ class Homepage extends React.Component {
     try {
       const result = await AuthService.session();
       this.setState({ sessionUser: result.data });
-      if(result.data.ban){
-        Alert.alert("Error", "บัญชีของคุณถูกระงับ", [{ text: "OK", onPress: () => this.logout() }]);
+      if (result.data.ban) {
+        Alert.alert("Error", "บัญชีของคุณถูกระงับ", [
+          { text: "OK", onPress: () => this.logout() },
+        ]);
       }
     } catch (err) {
       Alert.alert("Error", "โปรดเข้าสู่ระบบ", [{ text: "OK" }]);
     }
   };
   hide = (value) => {
-    this.setState({modalSwitch: value})
-  }
+    this.setState({ modalSwitch: value });
+  };
   change = () => {
-    this.child.setState({checkData: false})
+    this.child.setState({ checkData: false });
     this.child.getAllPost();
-  }
+  };
   render() {
     return (
       <NativeBaseProvider>
@@ -98,22 +100,29 @@ class Homepage extends React.Component {
           <HeadCarousel />
 
           <Box mt={6}>
-            <JobTabs user={this.state.sessionUser} change={this.state.value} onRef={(ref) => this.child = ref} />
+            <JobTabs
+              user={this.state.sessionUser}
+              change={this.state.value}
+              onRef={(ref) => (this.child = ref)}
+              navigation={this.props.navigation}
+            />
           </Box>
         </ScrollView>
         <FAB
           style={styles.fab}
           large
           icon="plus"
-          onPress={() => this.setState({modalSwitch: true})}
+          onPress={() => this.setState({ modalSwitch: true })}
         />
         {this.state.modalSwitch && (
-          <CreatePostModal user={this.state.sessionUser} setHide={this.hide} reRenderPost={this.change} />
+          <CreatePostModal
+            user={this.state.sessionUser}
+            setHide={this.hide}
+            reRenderPost={this.change}
+          />
         )}
-        
       </NativeBaseProvider>
     );
   }
-  
 }
 export default Homepage;

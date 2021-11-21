@@ -11,6 +11,7 @@ const UserController = {
         password,
         first_name,
         last_name,
+        description,
         email,
         dateOfBirth,
         job,
@@ -47,6 +48,7 @@ const UserController = {
         dateOfBirth,
         job,
         img,
+        description
       });
       const addUserToJob = await Job.findOne({ job });
       const arrUser = addUserToJob.user;
@@ -139,6 +141,7 @@ const UserController = {
           password: encryptedPassword,
           job: obj.job,
           img: img,
+          description: obj.description
         });
       } else {
         await User.findByIdAndUpdate(id, {
@@ -148,6 +151,7 @@ const UserController = {
           last_name: obj.last_name,
           job: obj.job,
           img: img,
+          description: obj.description
         });
       }
       res.status(201).json("Update user completed");
@@ -174,8 +178,13 @@ const UserController = {
   report: async function (req, res, next) {
     try {
       const { id } = req.params;
+      const obj = req.body
       const user = await User.findById(id);
-      await User.findByIdAndUpdate(id, { reportCount: user.reportCount + 1 });
+      const newArr = user.reportUser
+      newArr.push({
+        _id: obj._id
+      })
+      await User.findByIdAndUpdate(id, { reportCount: user.reportCount + 1, reportUser: newArr });
       res.status(201).send("Report user completed");
     } catch (err) {
       console.log(err);

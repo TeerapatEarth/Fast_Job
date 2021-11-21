@@ -28,6 +28,7 @@ export default class FormRegis extends Component {
       email: "",
       first_name: "",
       last_name: "",
+      description: "",
       job: "",
       day: "",
       month: "",
@@ -117,6 +118,7 @@ export default class FormRegis extends Component {
       fd.append("email", this.state.email);
       fd.append("first_name", this.state.first_name);
       fd.append("last_name", this.state.last_name);
+      fd.append("description", this.state.description);
       fd.append("job", this.state.job);
       const birth =
         this.state.year + "-" + this.state.month + "-" + this.state.day;
@@ -144,132 +146,266 @@ export default class FormRegis extends Component {
   render() {
     return (
       <NativeBaseProvider>
-        <ImageBackground style={{flex: 1}} source={require("../../assets/Back.png")}>
-        <ScrollView width="100%">
-          <Center flex={1}>
-            <Heading textAlign="center" mb="3" mt="10" style={styles.font}>
-              Fast Jobs
-            </Heading>
-            <Stack space={5} width="80%" style={{backgroundColor: "rgba(20,78,99,0.3)", padding: 10, borderRadius: 10,  margin: 5}}>
-              <Text fontSize="xl" textAlign="center" style={{color: "white", fontSize: 25}}>
-                Sign up
-              </Text>
-              {this.state.img && (
-                <Box style={{ alignItems: "center" }}>
-                  <Image
-                    source={{ uri: this.state.img }}
-                    style={{ width: 200, height: 200, alignContent: "center" }}
-                  />
-                </Box>
-              )}
-              <Button width="100%" onPress={() => this.pickImage()}>
-                Upload Image
-              </Button>
-              <FormControl isRequired>
-                <FormControl.Label _text={{ color: "white" }}>
-                  Username
-                </FormControl.Label>
-                <TextInput
-                  placeholder="Username"
-                  style={styles.bgInput}
-                  onChangeText={(text) => this.setState({ user_name: text })}
-                  mode="outlined"
-                  theme={{ colors: { placeholder: 'gray', text: 'black', primary: 'white',underlineColor:'transparent',background : '#003489'}}}
-                />
-              </FormControl>
-              <FormControl isRequired>
-                <FormControl.Label _text={{ color: "white" }}>
-                  Password
-                </FormControl.Label>
-                <TextInput
-                  placeholder="Password"
-                  secureTextEntry={true}
-                  style={styles.bgInput}
-                  onChangeText={(text) => this.setState({ password: text })}
-                  mode="outlined"
-                  theme={{ colors: { placeholder: 'gray', text: 'black', primary: 'white',underlineColor:'transparent',background : '#003489'}}}
-                />
-              </FormControl>
-              <FormControl isRequired>
-                <FormControl.Label _text={{ color: "white" }}>
-                  Confirm Password
-                </FormControl.Label>
-                <TextInput
-                  placeholder="Confirm Password"
-                  secureTextEntry={true}
-                  style={styles.bgInput}
-                  onChangeText={(text) =>
-                    this.setState({ confirmPassword: text })
-                  }
-                  mode="outlined"
-                  theme={{ colors: { placeholder: 'gray', text: 'black', primary: 'white',underlineColor:'transparent',background : '#003489'}}}
-                />
-              </FormControl>
-              <FormControl isRequired>
-                <FormControl.Label _text={{ color: "white" }}>
-                  Email
-                </FormControl.Label>
-                <TextInput
-                  placeholder="Email"
-                  style={styles.bgInput}
-                  onChangeText={(text) => this.setState({ email: text })}
-                  mode="outlined"
-                  theme={{ colors: { placeholder: 'gray', text: 'black', primary: 'white',underlineColor:'transparent',background : '#003489'}}}
-                />
-              </FormControl>
-              <FormControl isRequired>
-                <FormControl.Label _text={{ color: "white" }}>
-                  First name
-                </FormControl.Label>
-                <TextInput
-                  placeholder="First name"
-                  style={styles.bgInput}
-                  onChangeText={(text) => this.setState({ first_name: text })}
-                  mode="outlined"
-                  theme={{ colors: { placeholder: 'gray', text: 'black', primary: 'white',underlineColor:'transparent',background : '#003489'}}}
-                />
-              </FormControl>
-              <FormControl isRequired>
-                <FormControl.Label _text={{ color: "white" }}>
-                  Last name
-                </FormControl.Label>
-                <TextInput
-                  placeholder="Last name"
-                  style={styles.bgInput}
-                  onChangeText={(text) => this.setState({ last_name: text })}
-                  mode="outlined"
-                  theme={{ colors: { placeholder: 'gray', text: 'black', primary: 'white',underlineColor:'transparent',background : '#003489'}}}
-                />
-              </FormControl>
-              <FormControl isRequired>
-                <FormControl.Label _text={{ color: "white" }}>
-                  Job
-                </FormControl.Label>
-                <Select
-                  placeholder="Job"
-                  style={styles.bgInput}
-                  onValueChange={(value) => this.setState({ job: value })}
+        <ImageBackground
+          style={{ flex: 1 }}
+          source={require("../../assets/Back.png")}
+        >
+          <ScrollView width="100%">
+            <Center flex={1}>
+              <Heading textAlign="center" mb="3" mt="10" style={styles.font}>
+                Fast Jobs
+              </Heading>
+              <Stack
+                space={5}
+                width="80%"
+                style={{
+                  backgroundColor: "rgba(20,78,99,0.3)",
+                  padding: 10,
+                  borderRadius: 10,
+                  margin: 5,
+                }}
+              >
+                <Text
+                  fontSize="xl"
+                  textAlign="center"
+                  style={{ color: "white", fontSize: 25 }}
                 >
-                  {this.state.jobArr.map((item) => (
-                    <Select.Item
-                      key={item._id}
-                      label={item.job}
-                      value={item.job}
-                    ></Select.Item>
-                  ))}
-                </Select>
-              </FormControl>
-              <Box style={{ flexDirection: "row" }}>
-                <FormControl isRequired width="47%" mr={4}>
+                  Sign up
+                </Text>
+                {this.state.img && (
+                  <Box style={{ alignItems: "center" }}>
+                    <Image
+                      source={{ uri: this.state.img }}
+                      style={{
+                        width: 200,
+                        height: 200,
+                        alignContent: "center",
+                      }}
+                    />
+                  </Box>
+                )}
+                <Button width="100%" onPress={() => this.pickImage()}>
+                  Upload Image
+                </Button>
+                <FormControl isRequired>
                   <FormControl.Label _text={{ color: "white" }}>
-                    Day
+                    Username
+                  </FormControl.Label>
+                  <TextInput
+                    placeholder="Username"
+                    style={styles.bgInput}
+                    onChangeText={(text) => this.setState({ user_name: text })}
+                    mode="outlined"
+                    theme={{
+                      colors: {
+                        placeholder: "gray",
+                        text: "black",
+                        primary: "white",
+                        underlineColor: "transparent",
+                        background: "#003489",
+                      },
+                    }}
+                  />
+                </FormControl>
+                <FormControl isRequired>
+                  <FormControl.Label _text={{ color: "white" }}>
+                    Password
+                  </FormControl.Label>
+                  <TextInput
+                    placeholder="Password"
+                    secureTextEntry={true}
+                    style={styles.bgInput}
+                    onChangeText={(text) => this.setState({ password: text })}
+                    mode="outlined"
+                    theme={{
+                      colors: {
+                        placeholder: "gray",
+                        text: "black",
+                        primary: "white",
+                        underlineColor: "transparent",
+                        background: "#003489",
+                      },
+                    }}
+                  />
+                </FormControl>
+                <FormControl isRequired>
+                  <FormControl.Label _text={{ color: "white" }}>
+                    Confirm Password
+                  </FormControl.Label>
+                  <TextInput
+                    placeholder="Confirm Password"
+                    secureTextEntry={true}
+                    style={styles.bgInput}
+                    onChangeText={(text) =>
+                      this.setState({ confirmPassword: text })
+                    }
+                    mode="outlined"
+                    theme={{
+                      colors: {
+                        placeholder: "gray",
+                        text: "black",
+                        primary: "white",
+                        underlineColor: "transparent",
+                        background: "#003489",
+                      },
+                    }}
+                  />
+                </FormControl>
+                <FormControl isRequired>
+                  <FormControl.Label _text={{ color: "white" }}>
+                    Email
+                  </FormControl.Label>
+                  <TextInput
+                    placeholder="Email"
+                    style={styles.bgInput}
+                    onChangeText={(text) => this.setState({ email: text })}
+                    mode="outlined"
+                    theme={{
+                      colors: {
+                        placeholder: "gray",
+                        text: "black",
+                        primary: "white",
+                        underlineColor: "transparent",
+                        background: "#003489",
+                      },
+                    }}
+                  />
+                </FormControl>
+                <FormControl isRequired>
+                  <FormControl.Label _text={{ color: "white" }}>
+                    First name
+                  </FormControl.Label>
+                  <TextInput
+                    placeholder="First name"
+                    style={styles.bgInput}
+                    onChangeText={(text) => this.setState({ first_name: text })}
+                    mode="outlined"
+                    theme={{
+                      colors: {
+                        placeholder: "gray",
+                        text: "black",
+                        primary: "white",
+                        underlineColor: "transparent",
+                        background: "#003489",
+                      },
+                    }}
+                  />
+                </FormControl>
+                <FormControl isRequired>
+                  <FormControl.Label _text={{ color: "white" }}>
+                    Last name
+                  </FormControl.Label>
+                  <TextInput
+                    placeholder="Last name"
+                    style={styles.bgInput}
+                    onChangeText={(text) => this.setState({ last_name: text })}
+                    mode="outlined"
+                    theme={{
+                      colors: {
+                        placeholder: "gray",
+                        text: "black",
+                        primary: "white",
+                        underlineColor: "transparent",
+                        background: "#003489",
+                      },
+                    }}
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormControl.Label _text={{ color: "white" }}>
+                    Description
+                  </FormControl.Label>
+                  <TextInput
+                    placeholder="Description"
+                    style={styles.bgInput}
+                    onChangeText={(text) =>
+                      this.setState({ description: text })
+                    }
+                    mode="outlined"
+                    theme={{
+                      colors: {
+                        placeholder: "gray",
+                        text: "black",
+                        primary: "white",
+                        underlineColor: "transparent",
+                        background: "#003489",
+                      },
+                    }}
+                    numberOfLines={10}
+                    multiline={true}
+                  />
+                </FormControl>
+                <FormControl isRequired>
+                  <FormControl.Label _text={{ color: "white" }}>
+                    Job
                   </FormControl.Label>
                   <Select
-                    placeholder="Day"
+                    placeholder="Job"
                     style={styles.bgInput}
-                    onValueChange={(value) => this.setState({ day: value })}
+                    onValueChange={(value) => this.setState({ job: value })}
                   >
-                    {this.state.dayArr.map((item) => (
+                    {this.state.jobArr.map((item) => (
+                      <Select.Item
+                        key={item._id}
+                        label={item.job}
+                        value={item.job}
+                      ></Select.Item>
+                    ))}
+                  </Select>
+                </FormControl>
+                <Box style={{ flexDirection: "row" }}>
+                  <FormControl isRequired width="47%" mr={4}>
+                    <FormControl.Label _text={{ color: "white" }}>
+                      Day
+                    </FormControl.Label>
+                    <Select
+                      placeholder="Day"
+                      style={styles.bgInput}
+                      onValueChange={(value) => this.setState({ day: value })}
+                    >
+                      {this.state.dayArr.map((item) => (
+                        <Select.Item
+                          key={item}
+                          label={item}
+                          value={item}
+                        ></Select.Item>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  <FormControl isRequired width="47%" mr={4}>
+                    <FormControl.Label _text={{ color: "white" }}>
+                      Month
+                    </FormControl.Label>
+                    <Select
+                      placeholder="Month"
+                      style={styles.bgInput}
+                      onValueChange={(value) => this.setState({ month: value })}
+                    >
+                      <Select.Item label="January" value="1"></Select.Item>
+                      <Select.Item label="Febuary" value="2"></Select.Item>
+                      <Select.Item label="March" value="3"></Select.Item>
+                      <Select.Item label="Apirl" value="4"></Select.Item>
+                      <Select.Item label="May" value="5"></Select.Item>
+                      <Select.Item label="June" value="6"></Select.Item>
+                      <Select.Item label="July" value="7"></Select.Item>
+                      <Select.Item label="August" value="8"></Select.Item>
+                      <Select.Item label="September" value="9"></Select.Item>
+                      <Select.Item label="October" value="10"></Select.Item>
+                      <Select.Item label="November" value="11"></Select.Item>
+                      <Select.Item label="December" value="12"></Select.Item>
+                    </Select>
+                  </FormControl>
+                </Box>
+                <FormControl isRequired width="47%">
+                  <FormControl.Label _text={{ color: "white" }}>
+                    Year
+                  </FormControl.Label>
+                  <Select
+                    placeholder="Year"
+                    style={styles.bgInput}
+                    onValueChange={(value) => this.setState({ year: value })}
+                  >
+                    {this.state.yearArr.map((item) => (
                       <Select.Item
                         key={item}
                         label={item}
@@ -278,61 +414,19 @@ export default class FormRegis extends Component {
                     ))}
                   </Select>
                 </FormControl>
-                <FormControl isRequired width="47%" mr={4}>
-                  <FormControl.Label _text={{ color: "white" }}>
-                    Month
-                  </FormControl.Label>
-                  <Select
-                    placeholder="Month"
-                    style={styles.bgInput}
-                    onValueChange={(value) => this.setState({ month: value })}
-                  >
-                    <Select.Item label="January" value="1"></Select.Item>
-                    <Select.Item label="Febuary" value="2"></Select.Item>
-                    <Select.Item label="March" value="3"></Select.Item>
-                    <Select.Item label="Apirl" value="4"></Select.Item>
-                    <Select.Item label="May" value="5"></Select.Item>
-                    <Select.Item label="June" value="6"></Select.Item>
-                    <Select.Item label="July" value="7"></Select.Item>
-                    <Select.Item label="August" value="8"></Select.Item>
-                    <Select.Item label="September" value="9"></Select.Item>
-                    <Select.Item label="October" value="10"></Select.Item>
-                    <Select.Item label="November" value="11"></Select.Item>
-                    <Select.Item label="December" value="12"></Select.Item>
-                  </Select>
-                </FormControl>
-              </Box>
-              <FormControl isRequired width="47%">
-                <FormControl.Label _text={{ color: "white" }}>
-                  Year
-                </FormControl.Label>
-                <Select
-                  placeholder="Year"
-                  style={styles.bgInput}
-                  onValueChange={(value) => this.setState({ year: value })}
+                <Button width="100%" mb="1" mt="3" onPress={() => this.regis()}>
+                  Sign up
+                </Button>
+                <Button
+                  width="100%"
+                  mb="10"
+                  onPress={() => this.props.navigation.navigate("FormLogin")}
                 >
-                  {this.state.yearArr.map((item) => (
-                    <Select.Item
-                      key={item}
-                      label={item}
-                      value={item}
-                    ></Select.Item>
-                  ))}
-                </Select>
-              </FormControl>
-              <Button width="100%" mb="1" mt="3" onPress={() => this.regis()}>
-                Sign up
-              </Button>
-              <Button
-                width="100%"
-                mb="10"
-                onPress={() => this.props.navigation.navigate("FormLogin")}
-              >
-                Back
-              </Button>
-            </Stack>
-          </Center>
-        </ScrollView>
+                  Back
+                </Button>
+              </Stack>
+            </Center>
+          </ScrollView>
         </ImageBackground>
       </NativeBaseProvider>
     );
@@ -341,7 +435,7 @@ export default class FormRegis extends Component {
 const styles = StyleSheet.create({
   font: {
     color: "rgb(20,78,99)",
-    fontSize: 50
+    fontSize: 50,
   },
   bgInput: {
     backgroundColor: "white",

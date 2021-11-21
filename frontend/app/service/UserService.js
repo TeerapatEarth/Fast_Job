@@ -15,8 +15,8 @@ class UserService {
     static async getOneUser(id){
         return await axios.get(API.User.oneUser+id)
     }
-    static async reportUser(id){
-        return await axios.put(API.User.report+id)
+    static async reportUser(payload, id){
+        return await axios.put(API.User.report+id, payload)
     }
     static async seeNotify(id){
         return await axios.put(API.User.seeNotify+id)

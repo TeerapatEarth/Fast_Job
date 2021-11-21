@@ -1,6 +1,12 @@
 import React from "react";
-import { Card, Title, Paragraph, Avatar } from "react-native-paper";
-import { Input, TextArea, Text, Divider, Modal } from "native-base";
+import {
+  Card,
+  Title,
+  Paragraph,
+  Avatar,
+  TouchableRipple,
+} from "react-native-paper";
+import { Input, TextArea, Text, Divider, Modal, Spinner } from "native-base";
 import {
   Button,
   TextInput,
@@ -48,11 +54,15 @@ class DescModal extends React.Component {
           result.data.requestUser[i]._id == this.state.sessionUser._id &&
           result.data.requestUser[i].status == true
         ) {
-          this.setState({ renderAccept: true, renderhire: false, cancleRequest: false });
+          this.setState({
+            renderAccept: true,
+            renderhire: false,
+            cancleRequest: false,
+          });
         }
       }
       this.setState({ renderItem: true });
-      console.log(this.state)
+      console.log(this.state);
     } catch (err) {
       console.log(err);
     }
@@ -94,12 +104,23 @@ class DescModal extends React.Component {
       console.log(err);
     }
   };
+  closeModal = () => {
+    this.props.setHide(false);
+    this.props.navigation.navigate("anotherProfile", {
+      id: this.state.data.ownerId,
+    });
+  };
   render() {
     const LeftContent = () => (
-      <Avatar.Image size={48} source={{ uri: this.state.data.imgOwner }} />
+      <TouchableRipple onPress={() => this.closeModal()}>
+        <Avatar.Image size={48} source={{ uri: this.state.data.imgOwner }} />
+      </TouchableRipple>
     );
     return (
       <Modal isOpen={this.state.toggle}>
+        {!this.state.renderItem && (
+          <Spinner accessibilityLabel="Loading posts" />
+        )}
         {this.state.renderItem && (
           <Modal.Content>
             <Modal.Body>

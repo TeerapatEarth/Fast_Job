@@ -10,7 +10,7 @@ import {
   AppRegistry,
 } from "react-native";
 import Carousel from "react-native-snap-carousel";
-import { Card, Paragraph, Avatar } from "react-native-paper";
+import { Card, Paragraph, Avatar, TouchableRipple } from "react-native-paper";
 import { borderRadius, style, width } from "styled-system";
 import DescModal from "../Modal/DescModal";
 import EditModal from "../Modal/EditModal";
@@ -223,7 +223,15 @@ class JobCarousel extends React.Component {
               data={this.state.allData}
               renderItem={({ item, index }) => {
                 const LeftContent = (props) => (
-                  <Avatar.Image size={48} source={{ uri: item.imgOwner }} />
+                  <TouchableRipple
+                      onPress={() =>
+                        this.props.navigation.navigate("anotherProfile", {
+                          id: item.ownerId,
+                        })
+                      }
+                    >
+                      <Avatar.Image size={48} source={{ uri: item.imgOwner }} />
+                    </TouchableRipple>
                 );
                 return (
                   <View style={styles.slide}>
@@ -278,6 +286,7 @@ class JobCarousel extends React.Component {
             data={this.state.itemSelected}
             setHide={this.hide}
             hide={this.state.toggle}
+            navigation={this.props.navigation}
           />
         )}
         {this.state.modalEditSwitch && (

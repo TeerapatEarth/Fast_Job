@@ -9,6 +9,8 @@ import {
   Button,
   Input,
   FormControl,
+  Heading,
+  Spinner,
 } from "native-base";
 import React, { Component } from "react";
 import { Alert, Keyboard } from "react-native";
@@ -51,7 +53,7 @@ export default class Post extends Component {
           text: "OK",
         },
       ]);
-      Keyboard.dismiss()
+      Keyboard.dismiss();
     } catch (err) {
       console.log(err);
     }
@@ -98,6 +100,11 @@ export default class Post extends Component {
             </Button>
           </HStack>
         </FormControl>
+        {!this.state.renderItem && (
+          <Box>
+            <Spinner accessibilityLabel="Loading posts" />
+          </Box>
+        )}
         {this.state.renderItem && (
           <FlatList
             style={{ borderBottomColor: "red" }}
