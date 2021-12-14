@@ -127,6 +127,7 @@ class Profile extends React.Component {
       this.props.route.params.session.job = this.state.job;
       this.props.route.params.session.img = this.state.img;
       this.props.route.params.session.description = this.state.description;
+      this.props.route.params.update(this.state.img, this.state.user_name)
       const fd = new FormData();
       fd.append("user_name", this.state.user_name);
       fd.append("password", this.state.newPassword);

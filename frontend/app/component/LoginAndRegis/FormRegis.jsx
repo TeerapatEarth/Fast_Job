@@ -112,6 +112,15 @@ export default class FormRegis extends Component {
         ]);
         return 0;
       }
+      const date = new Date();
+      if (date.getFullYear() - parseInt(this.state.year) < 18) {
+        Alert.alert("Error", "คุณต้องมีอายุ 18 ขึ้นไปในการสมัครใช้งาน", [
+          {
+            text: "OK",
+          },
+        ]);
+        return 0;
+      }
       const fd = new FormData();
       fd.append("user_name", this.state.user_name);
       fd.append("password", this.state.password);
@@ -140,7 +149,7 @@ export default class FormRegis extends Component {
       ]);
     } catch (err) {
       console.log(err);
-      Alert.alert("Error", "กรอกข้อมูลไม่ถูกต้อง", [{ text: "OK" }]);
+      Alert.alert("ข้อมูลไม่ครบ", "กรุณากรอกข้อมูลที่ต้องการให้ครบ", [{ text: "OK" }]);
     }
   };
   render() {
