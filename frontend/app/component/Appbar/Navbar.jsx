@@ -64,6 +64,7 @@ export default class Navbar extends Component {
           onPress={() =>
             this.props.navigation.navigate("profile", {
               session: this.props.session,
+              update: this.props.update
             })
           }
         >

@@ -162,6 +162,7 @@ class HeadCarousel extends React.Component {
             onSnapToItem={(index) => this.setState({ activeIndex: index })}
             sliderWidth={sliderWidth}
             itemWidth={itemWidth}
+            loop
           />
         </View>
         {this.pagination}

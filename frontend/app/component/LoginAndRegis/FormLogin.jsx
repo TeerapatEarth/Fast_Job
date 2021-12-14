@@ -33,7 +33,7 @@ class FormLogin extends Component {
       this.setState({user_name: "", password: ""})
       this.props.navigation.navigate("home")
     } catch (err) {
-      Alert.alert("Error", "กรอกข้อมูลไม่ถูกต้อง", [{ text: "OK" }]);
+      Alert.alert("ข้อมูลไม่ถูกต้อง", "กรอก Username หรือ password ไม่ถูกต้อง", [{ text: "OK" }]);
     }
   };
   render() {

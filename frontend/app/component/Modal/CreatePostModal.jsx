@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Alert,
+  Spinner,
 } from "react-native";
 import { Input, TextArea, Text, Divider, Modal } from "native-base";
 import * as ImagePicker from "expo-image-picker";
@@ -108,9 +109,9 @@ class CreatePostModal extends React.Component {
       form.append("title", this.state.title);
       form.append("type", this.state.selectedType);
       form.append("ownerId", this.state.user);
-      form.append("first_name", this.props.user.first_name)
-      form.append("last_name", this.props.user.last_name)
-      form.append("imgOwner", this.props.user.img)
+      form.append("first_name", this.props.user.first_name);
+      form.append("last_name", this.props.user.last_name);
+      form.append("imgOwner", this.props.user.img);
       form.append("description", this.state.description);
       form.append("job", this.state.selectedJob);
 
@@ -126,7 +127,7 @@ class CreatePostModal extends React.Component {
       Alert.alert("Complete", "สร้างโพสต์เรียบร้อย", [
         {
           text: "OK",
-          onPress: () => this.closeModal()
+          onPress: () => this.closeModal(),
         },
       ]);
     } catch (er) {
@@ -137,10 +138,9 @@ class CreatePostModal extends React.Component {
 
   closeModal = () => {
     this.props.reRenderPost();
-    this.props.setHide(false)
-  }
+    this.props.setHide(false);
+  };
 
-  
   render() {
     const LeftContent = (props) => (
       <TouchableOpacity onPress={() => this.props.setHide(false)}>
@@ -152,12 +152,10 @@ class CreatePostModal extends React.Component {
       </TouchableOpacity>
     );
     return (
-      <Modal
-        isOpen={true}
-        onBackdropPress={() => this.props.setHide(false)}
-      >
+      <Modal isOpen={true} onBackdropPress={() => this.props.setHide(false)}>
         <ScrollView>
           <Card>
+            
             <Card.Title
               style={{ backgroundColor: "lightgray" }}
               title="Create Post"
@@ -242,7 +240,6 @@ class CreatePostModal extends React.Component {
                   ))}
                 </Picker>
               </View>
-
             </Card.Content>
             <Card.Content>
               <View
@@ -260,22 +257,23 @@ class CreatePostModal extends React.Component {
                     this.changeValueType(itemValue)
                   }
                 >
-                    <Picker.Item
-                      label="Find Job"
-                      value="find"
-                    />
-                    <Picker.Item
-                      label="Find Worker"
-                      value="hire"
-                    />
+                  <Picker.Item label="Find Job" value="find" />
+                  <Picker.Item label="Find Worker" value="hire" />
                 </Picker>
               </View>
-
             </Card.Content>
-            <Card.Content style={{marginTop: 10}}>
+            <Card.Content style={{ marginTop: 10 }}>
               <Card.Actions>
-                <TouchableOpacity onPress={() => this.createPost()} style={{ marginTop: 7, backgroundColor:"rgb(20,78,99)", padding: 15, borderRadius: 40}}>
-                  <Text style={{color: "white"}}>Create Post</Text>
+                <TouchableOpacity
+                  onPress={() => this.createPost()}
+                  style={{
+                    marginTop: 7,
+                    backgroundColor: "rgb(20,78,99)",
+                    padding: 15,
+                    borderRadius: 40,
+                  }}
+                >
+                  <Text style={{ color: "white" }}>Create Post</Text>
                 </TouchableOpacity>
               </Card.Actions>
             </Card.Content>

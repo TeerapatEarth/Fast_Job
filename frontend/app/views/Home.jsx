@@ -66,7 +66,7 @@ class Homepage extends React.Component {
       const result = await AuthService.session();
       this.setState({ sessionUser: result.data });
       if (result.data.ban) {
-        Alert.alert("Error", "บัญชีของคุณถูกระงับ", [
+        Alert.alert("เข้าสู่ระบบล้มเหลว", "บัญชีของคุณถูกระงับกรุณาติดต่อผู้ดูแลระบบ", [
           { text: "OK", onPress: () => this.logout() },
         ]);
       }
@@ -81,6 +81,12 @@ class Homepage extends React.Component {
     this.child.setState({ checkData: false });
     this.child.getAllPost();
   };
+  updateNav = (img, user_name) => {
+    const newItem = this.state.sessionUser
+    newItem.img = img,
+    newItem.user_name = user_name
+    this.setState({sessionUser: newItem})
+  }
   render() {
     return (
       <NativeBaseProvider>
@@ -88,6 +94,7 @@ class Homepage extends React.Component {
           logout={this.confirmLogout}
           navigation={this.props.navigation}
           session={this.state.sessionUser}
+          update={this.updateNav}
         ></Navbar>
         <ScrollView>
           <Box p={2} mb={3} style={styles.Header}>
