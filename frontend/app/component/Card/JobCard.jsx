@@ -29,7 +29,7 @@ class JobCard extends React.Component {
             subtitle={this.state.data.position}
           />
           <Card.Content>
-            <Title>Card title</Title>
+            <Title>Card title123</Title>
             <Paragraph>Card content</Paragraph>
           </Card.Content>
           <Card.Actions>
